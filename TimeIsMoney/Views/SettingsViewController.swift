@@ -88,14 +88,7 @@ final class SettingsViewController: UIViewController {
     }
     
     @objc func saveButtonTapped(_ sender: UIButton) {
-        guard let salaryText = salaryTField.text,
-              let expensesText = expensesTField.text else { return }
-        
-        
-        guard let newSalary = Double(salaryText),
-              let newExpenses = Double(expensesText) else { return }
-        
-        viewModel.setData(salary: newSalary, monthlyExpenses: newExpenses, dailyExpenses: [])
+        viewModel.handleUpdatedData(salary: salaryTField.text, expenses: expensesTField.text)
         navigationController?.popViewController(animated: true)
     }
 }

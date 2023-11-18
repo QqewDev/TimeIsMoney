@@ -21,13 +21,34 @@ protocol UserFinanceViewModelDelegate: AnyObject {
 }
 final class UserFinanceViewModel {
     
-    
+    //MARK: - Public variables
     weak var delegate: UserFinanceViewModelDelegate?
+    
+    public var salary: Double {
+        return data?.salary ?? 0.0
+    }
+    
+    public var monthlyExpenses: Double {
+        return data?.monthlyExpenses ?? 0.0
+    }
+    public var availableMoney: Double {
+        return data?.availableMoney ?? 0.0
+    }
+    
+    public var earnedMoney: Double {
+        return data?.earnedMoney().rounding(toPlaces: 2) ?? 0.0
+    }
+    
+    public var dailyExpenses: [DailyExpense] {
+        return data?.dailyExpenses ?? []
+    }
     
     private var data: UserFinanceModel?
     
     private let realm: Realm?
     
+    
+    //MARK: - Init Realm
     init() {
         do {
             realm = try Realm()
@@ -37,28 +58,60 @@ final class UserFinanceViewModel {
         }
     }
     
-    var salary: Double {
-        return data?.salary ?? 0.0
-    }
-    
-    var monthlyExpenses: Double {
-        return data?.monthlyExpenses ?? 0.0
-    }
-    var availableMoney: Double {
-        return data?.availableMoney ?? 0.0
-    }
-    
-    var earnedMoney: Double {
-        return data?.earnedMoney().rounding(toPlaces: 2) ?? 0.0
-    }
-    
-    var dailyExpenses: [DailyExpense] {
-        return data?.dailyExpenses ?? []
-    }
-    
-    func setData(salary: Double, monthlyExpenses: Double, dailyExpenses: [DailyExpense]){
-        data = UserFinanceModel(salary: salary, monthlyExpenses: monthlyExpenses, dailyExpenses: dailyExpenses)
+    //MARK: - Public methods
+    func handleInputData(salary: String?, expenses: String?) {
+        guard let salaryText = salary,
+              let expensesText = expenses else { return }
         
+        guard let salaryDouble = Double(salaryText),
+              let expensesDouble = Double(expensesText) else { return }
+        
+        setData(salary: salaryDouble, monthlyExpenses: expensesDouble, newExpense: nil)
+    }
+    
+    func handleUpdatedData(salary: String?, expenses: String?) {
+        guard let salaryText = salary,
+              let expensesText = expenses else { return }
+        
+        guard let newSalary = Double(salaryText),
+              let newExpenses = Double(expensesText) else { return }
+        
+        updateSalaryAndExpenses(salary: newSalary, monthlyExpenses: newExpenses)
+    }
+    
+    
+    func handleAddedExpense(title: String?, cost: String?, purchaseDate: Date?) {
+        guard let titleText = title,
+              let costText = cost else { return }
+        
+        guard let costDouble = Double(costText) else { return }
+        
+        guard let purchaseDate = purchaseDate else { return }
+        
+        let dailyExpense = DailyExpense(name: titleText, coast: costDouble, date: purchaseDate)
+        setData(salary: self.salary, monthlyExpenses: self.monthlyExpenses, newExpense: dailyExpense)
+    }
+    
+    func loadData(){
+        do {
+            try loadFromRealm()
+            delegate?.didUpdatedData()
+        } catch UserFinanceError.failedToLoadData {
+            print("Ошибка загрузки данных")
+        } catch {
+            print("Неизвестная ошибка: \(error.localizedDescription)")
+        }
+    }
+    
+    //MARK: - Private Methods
+    private func setData(salary: Double, monthlyExpenses: Double, newExpense: DailyExpense?){
+        if data == nil {
+            data = UserFinanceModel(salary: salary, monthlyExpenses: monthlyExpenses, dailyExpenses: newExpense != nil ? [newExpense!] : [])
+        } else {
+            if let expense = newExpense {
+                data?.dailyExpenses.append(expense)
+            }
+        }
         
         do {
             try saveToRealm()
@@ -70,17 +123,23 @@ final class UserFinanceViewModel {
         }
     }
     
-    func loadData(){
+    private func updateSalaryAndExpenses(salary: Double, monthlyExpenses: Double) {
         do {
-            try loadFromRealm()
-        } catch UserFinanceError.failedToLoadData {
-            print("Ошибка загрузки данных")
+            try realm?.write {
+                if let userFinance = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: "single_user_id") {
+                    userFinance.salary = salary
+                    userFinance.monthlyExpenses = monthlyExpenses
+                    print("Зарплата и ежемесячные расходы успешно обновлены")
+                } else {
+                    print("Объект UserFinanceRealmModel не найден")
+                }
+            }
+            self.delegate?.didUpdatedData()
         } catch {
-            print("Неизвестная ошибка: (error.localizedDescription)")
+            print("Ошибка обновления зарплаты и ежемесячных расходов: \(error.localizedDescription)")
         }
     }
-}
-extension UserFinanceViewModel {
+    
     private func saveToRealm() throws {
         guard let data = data else {
             throw UserFinanceError.dataNotFound
@@ -93,28 +152,29 @@ extension UserFinanceViewModel {
         
         realmModel.dailyExpenses.append(objectsIn: data.dailyExpenses.map { dailyExpense in
             let realmDailyExpense = DailyExpenseRealmModel()
-            realmDailyExpense.type = dailyExpense.type
-        realmDailyExpense.amount = dailyExpense.amount
-        realmDailyExpense.date = dailyExpense.date
-        return realmDailyExpense
-    })
-    
-    do {
-        try realm?.write {
-            realm?.add(realmModel, update: .modified)
-            print("Сохранение успешно с \(realmModel.salary), \(realmModel.monthlyExpenses),  и \(realmModel.dailyExpenses)")
+            realmDailyExpense.name = dailyExpense.name
+            realmDailyExpense.coast = dailyExpense.coast
+            realmDailyExpense.date = dailyExpense.date
+            return realmDailyExpense
+        })
+        
+        do {
+            try realm?.write {
+                realm?.add(realmModel, update: .modified)
+                print("Сохранение успешно с \(realmModel.salary), \(realmModel.monthlyExpenses),  и \(realmModel.dailyExpenses)")
+            }
+        } catch {
+            throw UserFinanceError.failedToSaveData
         }
-    } catch {
-        throw UserFinanceError.failedToSaveData
     }
-}
+    
     private func loadFromRealm() throws {
         
         guard let realmModel = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: "single_user_id") else {
             throw UserFinanceError.failedToLoadData
         }
         
-        let dailyExpenses = realmModel.dailyExpenses.map { DailyExpense(type: $0.type, amount: $0.amount, date: $0.date) }
+        let dailyExpenses = realmModel.dailyExpenses.map { DailyExpense(name: $0.name, coast: $0.coast, date: $0.date) }
         
         data = UserFinanceModel(salary: realmModel.salary, monthlyExpenses: realmModel.monthlyExpenses, dailyExpenses: Array(dailyExpenses))
         print("Информация успешно получена со значениями зп: \(realmModel.salary),траты: \(realmModel.monthlyExpenses), и дневными тратами: \(realmModel.dailyExpenses)")

@@ -22,8 +22,8 @@ class UserFinanceRealmModel: Object{
 }
 class DailyExpenseRealmModel: Object {
     @objc dynamic var id = UUID().uuidString
-    @objc dynamic var type: String = ""
-    @objc dynamic var amount: Double = 0
+    @objc dynamic var name: String = ""
+    @objc dynamic var coast: Double = 0
     @objc dynamic var date = Date()
     
     override static func primaryKey() -> String? {

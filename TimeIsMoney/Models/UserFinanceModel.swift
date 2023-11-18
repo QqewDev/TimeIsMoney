@@ -9,14 +9,14 @@
 import Foundation
 
 struct UserFinanceModel {
-    let salary: Double
-    let monthlyExpenses: Double
-    let dailyExpenses: [DailyExpense]
+    var salary: Double
+    var monthlyExpenses: Double
+    var dailyExpenses: [DailyExpense]
     let secondsInMonth: Double = 2_592_000
 }
 struct DailyExpense {
-    var type: String
-    var amount: Double
+    var name: String
+    var coast: Double
     var date: Date
 }
 extension UserFinanceModel {

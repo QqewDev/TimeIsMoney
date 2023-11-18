@@ -16,6 +16,7 @@ final class DetailViewController: UIViewController{
     init(viewModel: UserFinanceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -34,6 +35,14 @@ final class DetailViewController: UIViewController{
     
     private let earnedMoneyLabel = UILabel(numberOfLines: 0, font: UIFont.preferredFont(forTextStyle: .title1), textColor: .text)
     
+    private let addExpenseButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Добавить", for:  .normal)
+        button.backgroundColor = .systemGreen
+        return button
+    }()
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadData()
@@ -46,7 +55,6 @@ final class DetailViewController: UIViewController{
         view.backgroundColor = .systemBackground
         setupViews()
         setConstraints()
-        viewModel.delegate = self
         setupNavBar()
     }
     
@@ -55,9 +63,17 @@ final class DetailViewController: UIViewController{
         stopTimer()
     }
     
+    override func viewWillLayoutSubviews() {
+        addExpenseButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+    }
+    
     //MARK: - Private methods
     private func setupTimer(){
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateUI), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateUI() {
+        earnedMoneyLabel.text = "Заработано:\n\(viewModel.earnedMoney)"
     }
     
     private func stopTimer(){
@@ -70,6 +86,28 @@ final class DetailViewController: UIViewController{
         expensesLabel.text = "Траты:\n\(viewModel.monthlyExpenses)₽"
         availableMoneyLabel.text = "Свободно:\n\(viewModel.availableMoney)₽"
         earnedMoneyLabel.text = "Заработано:\n\(viewModel.earnedMoney)"
+        addExpenseButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        
+        makeAddButtonCorners()
+
+    }
+    
+    private func makeAddButtonCorners(){
+        DispatchQueue.main.async {
+            let maskPath = UIBezierPath(roundedRect: self.addExpenseButton.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 10, height: 10))
+            let shape = CAShapeLayer()
+            shape.path = maskPath.cgPath
+            self.addExpenseButton.layer.mask = shape
+        }
+    }
+    
+    @objc func addButtonTapped(){
+        let addExpenseVC = AddExpenseViewController(viewModel: viewModel)
+        if let sheet = addExpenseVC.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(addExpenseVC, animated: true)
     }
     
     private func setupNavBar() {
@@ -86,14 +124,13 @@ final class DetailViewController: UIViewController{
         navigationController?.pushViewController(settingsVC, animated: true)
     }
     
-    @objc func updateUI() {
-        earnedMoneyLabel.text = "Заработано:\n\(viewModel.earnedMoney)"
-    }
+    
     private func setConstraints(){
         view.addSubview(salaryLabel)
         view.addSubview(expensesLabel)
         view.addSubview(availableMoneyLabel)
         view.addSubview(earnedMoneyLabel)
+        view.addSubview(addExpenseButton)
         
         
         salaryLabel.snp.makeConstraints { make in
@@ -115,14 +152,22 @@ final class DetailViewController: UIViewController{
             make.top.equalTo(availableMoneyLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
         }
+        
+        addExpenseButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.1)
+        }
     }
 }
 extension DetailViewController: UserFinanceViewModelDelegate {
     func didUpdatedData() {
-        salaryLabel.text = "Зарплата:\n\(viewModel.salary)₽"
-        expensesLabel.text = "Траты:\n\(viewModel.monthlyExpenses)₽"
-        availableMoneyLabel.text = "Свободно:\n\(viewModel.availableMoney)₽"
-        earnedMoneyLabel.text = "Заработано:\n\(viewModel.earnedMoney)"
+        DispatchQueue.main.async {
+            self.salaryLabel.text = "Зарплата:\n\(self.viewModel.salary)₽"
+            self.expensesLabel.text = "Траты:\n\(self.viewModel.monthlyExpenses)₽"
+            self.availableMoneyLabel.text = "Свободно:\n\(self.viewModel.availableMoney)₽"
+            self.earnedMoneyLabel.text = "Заработано:\n\(self.viewModel.earnedMoney)"
+        }
     }
 }
 

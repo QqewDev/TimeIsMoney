@@ -72,17 +72,10 @@ final class InputViewController: UIViewController {
         
         navButton.addAction(UIAction(handler: {[weak self] _ in
             guard let self = self else { return }
-            
-            guard let salaryText = salaryTField.text,
-                  let expensesText = expensesTField.text else { return }
-            
-            guard let salary = Double(salaryText),
-                  let expenses = Double(expensesText) else { return }
-            
-            viewModel.setData(salary: salary, monthlyExpenses: expenses, dailyExpenses: [])
+            viewModel.handleInputData(salary: salaryTField.text, expenses: expensesTField.text)
             
             let detailVC = DetailViewController(viewModel: viewModel)
-            navigationController?.pushViewController(detailVC, animated: true)
+            self.navigationController?.setViewControllers([detailVC], animated: true)
             
         }), for: .touchUpInside)
     }

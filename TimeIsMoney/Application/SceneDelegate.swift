@@ -16,10 +16,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = UINavigationController(rootViewController: InputViewController())
-        self.window = window
-        self.window?.makeKeyAndVisible()
+            
+            let window = UIWindow(windowScene: windowScene)
+            let navigationController = UINavigationController()
+            window.rootViewController = navigationController
+            self.window = window
+            
+            if UserDefaults.standard.bool(forKey: "wasLaunchedBefore") {
+                // Если приложение запускалось ранее, откройте DetailViewController
+                let viewModel = UserFinanceViewModel()
+                let detailVC = DetailViewController(viewModel: viewModel)
+                navigationController.viewControllers = [detailVC]
+            } else {
+                // Если это первый запуск приложения, откройте InputViewController
+                let inputVC = InputViewController()
+                navigationController.viewControllers = [inputVC]
+                
+                // Запишите, что приложение было запущено
+                UserDefaults.standard.set(true, forKey: "wasLaunchedBefore")
+            }
+            
+            self.window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
