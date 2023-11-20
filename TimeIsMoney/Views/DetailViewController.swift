@@ -28,31 +28,32 @@ final class DetailViewController: UIViewController{
     
     private var timer: Timer?
     
-    private let salaryLabel = UILabel(numberOfLines: 0, font: UIFont.preferredFont(forTextStyle: .headline), textColor: .text)
-    private let expensesLabel = UILabel(numberOfLines: 0, font: UIFont.preferredFont(forTextStyle: .title2), textColor: .text)
-    
-    private let availableMoneyLabel = UILabel(numberOfLines: 0, font: UIFont.preferredFont(forTextStyle: .title3), textColor: .text)
-    
-    private let earnedMoneyLabel = UILabel(numberOfLines: 0, font: UIFont.preferredFont(forTextStyle: .title1), textColor: .text)
+    private lazy var salaryInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.preferredFont(forTextStyle: .largeTitle))
+    private lazy var expensesInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.preferredFont(forTextStyle: .largeTitle))
+    private lazy var availableMoneyInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.preferredFont(forTextStyle: .largeTitle))
+    private lazy var earnedMoneyInfoLabel = makeLabel(textColor: .mainGreen, font: UIFont.preferredFont(forTextStyle: .largeTitle))
     
     private let addExpenseButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить", for:  .normal)
-        button.backgroundColor = .systemGreen
+        button.setTitle("Внести трату", for:  .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .mainGreen
         return button
     }()
     
     
+    //MARK: - Lifecycle Methods
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadData()
         setupTimer()
     }
     
-    //MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        title = "Сегодня"
+        navigationItem.largeTitleDisplayMode = .automatic
         setupViews()
         setConstraints()
         setupNavBar()
@@ -64,7 +65,7 @@ final class DetailViewController: UIViewController{
     }
     
     override func viewWillLayoutSubviews() {
-        addExpenseButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+//        addExpenseButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
     
     //MARK: - Private methods
@@ -73,7 +74,7 @@ final class DetailViewController: UIViewController{
     }
     
     @objc func updateUI() {
-        earnedMoneyLabel.text = "Заработано:\n\(viewModel.earnedMoney)"
+        earnedMoneyInfoLabel.text = "Заработано:\n\(viewModel.earnedMoney)₽"
     }
     
     private func stopTimer(){
@@ -82,10 +83,10 @@ final class DetailViewController: UIViewController{
     }
     
     private func setupViews(){
-        salaryLabel.text = "Зарплата:\n\(viewModel.salary)₽"
-        expensesLabel.text = "Траты:\n\(viewModel.monthlyExpenses)₽"
-        availableMoneyLabel.text = "Свободно:\n\(viewModel.availableMoney)₽"
-        earnedMoneyLabel.text = "Заработано:\n\(viewModel.earnedMoney)"
+        salaryInfoLabel.text = "Зарплата:\n\(viewModel.salary)₽"
+        expensesInfoLabel.text = "Траты:\n\(viewModel.monthlyExpenses)₽"
+        availableMoneyInfoLabel.text = "Свободно:\n\(viewModel.availableMoney)₽"
+        earnedMoneyInfoLabel.text = "Заработано:\n\(viewModel.earnedMoney)"
         addExpenseButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
         makeAddButtonCorners()
@@ -111,12 +112,16 @@ final class DetailViewController: UIViewController{
     }
     
     private func setupNavBar() {
-        title = "Сегодня"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
-        
         let settingsButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingsButtonTapped))
-        navigationItem.rightBarButtonItem = settingsButton
+        navigationItem.leftBarButtonItem = settingsButton
+        navigationItem.leftBarButtonItem?.tintColor = .mainGreen
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.mainGreen]
+
+        let expensesListButton = UIBarButtonItem(image: UIImage(systemName: "list.dash"), style: .plain, target: self, action: #selector(expensesListButtonTapped))
+        navigationItem.rightBarButtonItem = expensesListButton
+        navigationItem.rightBarButtonItem?.tintColor = .mainGreen
+
     }
     
     @objc func settingsButtonTapped(){
@@ -124,32 +129,38 @@ final class DetailViewController: UIViewController{
         navigationController?.pushViewController(settingsVC, animated: true)
     }
     
+    @objc func expensesListButtonTapped(){
+        let expensesListVM = ExpensesListViewModel()
+        let expensesListVC = ExpensesListViewController(viewModel: expensesListVM)
+        navigationController?.pushViewController(expensesListVC, animated: true)
+    }
+    
     
     private func setConstraints(){
-        view.addSubview(salaryLabel)
-        view.addSubview(expensesLabel)
-        view.addSubview(availableMoneyLabel)
-        view.addSubview(earnedMoneyLabel)
+        view.addSubview(salaryInfoLabel)
+        view.addSubview(expensesInfoLabel)
+        view.addSubview(availableMoneyInfoLabel)
+        view.addSubview(earnedMoneyInfoLabel)
         view.addSubview(addExpenseButton)
         
         
-        salaryLabel.snp.makeConstraints { make in
+        salaryInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
-        expensesLabel.snp.makeConstraints { make in
-            make.top.equalTo(salaryLabel.snp.bottom).offset(20)
+        expensesInfoLabel.snp.makeConstraints { make in
+            make.top.equalTo(salaryInfoLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
-        availableMoneyLabel.snp.makeConstraints { make in
-            make.top.equalTo(expensesLabel.snp.bottom).offset(20)
+        availableMoneyInfoLabel.snp.makeConstraints { make in
+            make.top.equalTo(expensesInfoLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
-        earnedMoneyLabel.snp.makeConstraints { make in
-            make.top.equalTo(availableMoneyLabel.snp.bottom).offset(20)
+        earnedMoneyInfoLabel.snp.makeConstraints { make in
+            make.top.equalTo(availableMoneyInfoLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
@@ -159,14 +170,22 @@ final class DetailViewController: UIViewController{
             make.height.equalToSuperview().multipliedBy(0.1)
         }
     }
+    
+    private func makeLabel(textColor: UIColor, font: UIFont) -> UILabel {
+        let label = UILabel()
+        label.textColor = textColor
+        label.font = font
+        label.numberOfLines = 0
+        return label
+    }
 }
 extension DetailViewController: UserFinanceViewModelDelegate {
     func didUpdatedData() {
         DispatchQueue.main.async {
-            self.salaryLabel.text = "Зарплата:\n\(self.viewModel.salary)₽"
-            self.expensesLabel.text = "Траты:\n\(self.viewModel.monthlyExpenses)₽"
-            self.availableMoneyLabel.text = "Свободно:\n\(self.viewModel.availableMoney)₽"
-            self.earnedMoneyLabel.text = "Заработано:\n\(self.viewModel.earnedMoney)"
+            self.salaryInfoLabel.text = "Зарплата:\n\(self.viewModel.salary)₽"
+            self.expensesInfoLabel.text = "Траты:\n\(self.viewModel.monthlyExpenses)₽"
+            self.availableMoneyInfoLabel.text = "Свободно:\n\(self.viewModel.availableMoney)₽"
+            self.earnedMoneyInfoLabel.text = "Заработано:\n\(self.viewModel.earnedMoney)₽"
         }
     }
 }

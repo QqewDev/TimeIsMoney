@@ -27,9 +27,11 @@ final class ExpensesListViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .background
+        view.backgroundColor = .systemBackground
+        title = "Траты"
         setupTableView()
         setConstraints()
+        setupNavBar()
     }
     
     
@@ -39,12 +41,9 @@ final class ExpensesListViewController: UIViewController{
         expensesTableView.dataSource = self
         expensesTableView.showsVerticalScrollIndicator = false
         expensesTableView.showsHorizontalScrollIndicator = false
-        expensesTableView.separatorStyle = .singleLine
-        expensesTableView.backgroundColor = .clear
+        expensesTableView.backgroundColor = .systemBackground
         expensesTableView.register(ExpensesCell.self, forCellReuseIdentifier: "\(ExpensesCell.self)")
-        expensesTableView.tableHeaderView?.backgroundColor = .background
-        expensesTableView.sectionIndexColor = .mainGreen
-        expensesTableView.color
+        expensesTableView.allowsSelection = false
         
         view.addSubview(expensesTableView)
     }
@@ -53,6 +52,11 @@ final class ExpensesListViewController: UIViewController{
         expensesTableView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    private func setupNavBar(){
+        navigationController?.navigationBar.tintColor = .mainGreen
+        navigationController?.navigationBar.barTintColor = .systemBackground
     }
 }
 
@@ -69,6 +73,7 @@ extension ExpensesListViewController: UITableViewDataSource{
     
      func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let date = viewModel.uniqueDates[section]
+         tableView.tintColor = .mainGreen
         return "Покупки за \(date)"
     }
     

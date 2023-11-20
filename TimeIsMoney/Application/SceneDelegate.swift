@@ -16,27 +16,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        let window = UIWindow(windowScene: windowScene)
+        let navigationController = UINavigationController()
+        window.rootViewController = navigationController
+        self.window = window
+
+        if UserDefaults.standard.bool(forKey: "wasLaunchedBefore") {
             
-            let window = UIWindow(windowScene: windowScene)
-            let navigationController = UINavigationController()
-            window.rootViewController = navigationController
-            self.window = window
+            let viewModel = UserFinanceViewModel()
+            let detailVC = DetailViewController(viewModel: viewModel)
+            navigationController.viewControllers = [detailVC]
+        } else {
             
-            if UserDefaults.standard.bool(forKey: "wasLaunchedBefore") {
-                // Если приложение запускалось ранее, откройте DetailViewController
-                let viewModel = UserFinanceViewModel()
-                let detailVC = DetailViewController(viewModel: viewModel)
-                navigationController.viewControllers = [detailVC]
-            } else {
-                // Если это первый запуск приложения, откройте InputViewController
-                let inputVC = InputViewController()
-                navigationController.viewControllers = [inputVC]
-                
-                // Запишите, что приложение было запущено
-                UserDefaults.standard.set(true, forKey: "wasLaunchedBefore")
-            }
+            let inputVC = InputViewController()
+            navigationController.viewControllers = [inputVC]
             
-            self.window?.makeKeyAndVisible()
+           
+        }
+        
+        self.window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -9,8 +9,18 @@
 
 import UIKit
 
+private enum Constants {
+    static let purchasePlaceholder: String = "Название покупки"
+    static let costPlaceholder: String = "Стоимость покупки"
+    static let saveButtonTitle: String = "Внести"
+    static let viewVerticalOffset: CGFloat = 20
+    static let viewHorizontalInset: CGFloat = 20
+    static let tFieldHeight: CGFloat = 50
+    static let buttonSize: CGFloat = 50
+    static let borderWidth: CGFloat = 1
+}
 
-class AddExpenseViewController: UIViewController {
+final class AddExpenseViewController: UIViewController {
     
     //MARK: Init
     init(viewModel: UserFinanceViewModel) {
@@ -25,25 +35,14 @@ class AddExpenseViewController: UIViewController {
     //MARK: - Private properties
     private let viewModel: UserFinanceViewModel
     
-    private let purchaseTitleField: UITextField = {
-        let tField = UITextField()
-        tField.borderStyle = .roundedRect
-        tField.placeholder = "Название покупки"
-        return tField
-    }()
-    
-    private let purchaseCostField: UITextField = {
-        let tField = UITextField()
-        tField.borderStyle = .roundedRect
-        tField.placeholder = "Стоимость покупки"
-        tField.keyboardType = .decimalPad
-        return tField
-    }()
+    private lazy var purchaseTitleTField = makeTextField(placeholder: Constants.purchasePlaceholder, keyboardType: .default)
+    private lazy var purchaseCostTField = makeTextField(placeholder: Constants.costPlaceholder, keyboardType: .decimalPad)
     
     private let saveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Сохранить", for: .normal)
-        button.backgroundColor = .systemGreen
+        button.setTitle(Constants.saveButtonTitle, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .backgroundText
         return button
     }()
     
@@ -52,44 +51,75 @@ class AddExpenseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemGreen
+        view.backgroundColor = .mainGreen
         setupViews()
         setConstraints()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        settingViewCorners()
+    }
+    
+    private func settingViewCorners(){
+        purchaseTitleTField.layer.cornerRadius = purchaseTitleTField.frame.height / 2
+        purchaseCostTField.layer.cornerRadius = purchaseCostTField.frame.height / 2
+        saveButton.layer.cornerRadius = saveButton.frame.height / 2
+    }
     
     private func setupViews(){
-        view.addSubview(purchaseCostField)
-        view.addSubview(purchaseTitleField)
+        view.addSubview(purchaseCostTField)
+        view.addSubview(purchaseTitleTField)
         view.addSubview(saveButton)
+        
+        purchaseTitleTField.becomeFirstResponder()
         
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
     
     @objc func saveButtonTapped(_ sender: UIButton) {
-        viewModel.handleAddedExpense(title: purchaseTitleField.text, cost: purchaseCostField.text, purchaseDate: Date())
+        viewModel.handleAddedExpense(title: purchaseTitleTField.text, cost: purchaseCostTField.text, purchaseDate: Date())
         dismiss(animated: true, completion: nil)
     }
     
     private func setConstraints(){
-        purchaseTitleField.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(50)
+        purchaseTitleTField.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(Constants.viewVerticalOffset)
+            make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
+            make.height.equalTo(Constants.tFieldHeight)
         }
         
-        purchaseCostField.snp.makeConstraints { make in
-            make.top.equalTo(purchaseTitleField.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(50)
+        purchaseCostTField.snp.makeConstraints { make in
+            make.top.equalTo(purchaseTitleTField.snp.bottom).offset(Constants.viewVerticalOffset)
+            make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
+            make.height.equalTo(Constants.tFieldHeight)
         }
         
         saveButton.snp.makeConstraints { make in
-            make.top.equalTo(purchaseCostField.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(50)
+            make.top.equalTo(purchaseCostTField.snp.bottom).offset(Constants.viewVerticalOffset)
+            make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
+            make.height.equalTo(Constants.buttonSize)
         }
     }
     
+    
+    private func makeTextField(placeholder: String, keyboardType: UIKeyboardType) -> UITextField {
+        let tField = UITextField()
+        let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: tField.frame.height))
+        tField.leftView = spacingView
+        tField.leftViewMode = .always
+        tField.rightView = spacingView
+        tField.rightViewMode = .always
+        tField.borderStyle = .roundedRect
+        tField.keyboardType = keyboardType
+        tField.backgroundColor = .mainGreen
+        tField.textColor = .backgroundText
+        tField.font = UIFont.preferredFont(forTextStyle: .title2)
+        tField.layer.borderWidth = 1.0
+        tField.layer.borderColor = UIColor.backgroundText.cgColor
+        tField.attributedPlaceholder = NSAttributedString(string: placeholder,
+                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText.withAlphaComponent(0.4)])
+        return tField
+    }
     
 }

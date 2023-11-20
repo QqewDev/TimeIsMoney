@@ -38,7 +38,7 @@ final class ExpensesCell: UITableViewCell {
         stackView.addArrangedSubview(nameLabel)
         stackView.addArrangedSubview(priceLabel)
         
-        contentView.backgroundColor = .background
+        contentView.backgroundColor = .systemBackground
         
         nameLabel.textColor = .mainGreen
         priceLabel.textColor = .mainGreen
