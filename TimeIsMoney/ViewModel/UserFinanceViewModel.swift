@@ -11,7 +11,7 @@
 import Foundation
 import RealmSwift
 
-enum UserFinanceError: Error {
+private enum RealmDBError: Error {
     case dataNotFound
     case failedToSaveData
     case failedToLoadData
@@ -53,7 +53,7 @@ final class UserFinanceViewModel {
         do {
             realm = try Realm()
         } catch let error {
-            print("Failed to instantiate Realm: \(error)")
+            print("Failed to instantiate Realm: \(error.localizedDescription)")
             realm = nil
         }
     }
@@ -96,10 +96,26 @@ final class UserFinanceViewModel {
         do {
             try loadFromRealm()
             delegate?.didUpdatedData()
-        } catch UserFinanceError.failedToLoadData {
+        } catch RealmDBError.failedToLoadData {
             print("Ошибка загрузки данных")
         } catch {
             print("Неизвестная ошибка: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteAllDailyExpenses() {
+        do {
+            try realm?.write {
+                if let userFinance = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: "single_user_id") {
+                    userFinance.dailyExpenses.removeAll()
+                    print("Все ежедневные расходы успешно удалены")
+                } else {
+                    print("Объект UserFinanceRealmModel не найден")
+                }
+            }
+            self.delegate?.didUpdatedData()
+        } catch {
+            print("Ошибка удаления ежедневных расходов: \(error.localizedDescription)")
         }
     }
     
@@ -116,7 +132,7 @@ final class UserFinanceViewModel {
         do {
             try saveToRealm()
             self.delegate?.didUpdatedData()
-        } catch UserFinanceError.failedToSaveData {
+        } catch RealmDBError.failedToSaveData {
             print("Ошибка сохранения данных в базу данных")
         } catch {
             print("Неизвестная ошибка: \(error.localizedDescription)")
@@ -142,7 +158,7 @@ final class UserFinanceViewModel {
     
     private func saveToRealm() throws {
         guard let data = data else {
-            throw UserFinanceError.dataNotFound
+            throw RealmDBError.dataNotFound
         }
         
         
@@ -164,14 +180,14 @@ final class UserFinanceViewModel {
                 print("Сохранение успешно с \(realmModel.salary), \(realmModel.monthlyExpenses),  и \(realmModel.dailyExpenses)")
             }
         } catch {
-            throw UserFinanceError.failedToSaveData
+            throw RealmDBError.failedToSaveData
         }
     }
     
     private func loadFromRealm() throws {
         
         guard let realmModel = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: "single_user_id") else {
-            throw UserFinanceError.failedToLoadData
+            throw RealmDBError.failedToLoadData
         }
         
         let dailyExpenses = realmModel.dailyExpenses.map { DailyExpense(name: $0.name, coast: $0.coast, date: $0.date) }
