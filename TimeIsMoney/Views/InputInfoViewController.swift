@@ -6,7 +6,6 @@
 // Created by Alexander Kist on 16.11.2023.
 //
 
-
 import Foundation
 import UIKit
 
@@ -21,18 +20,18 @@ private enum Constants {
 }
 
 final class InputViewController: UIViewController {
-    
-    //MARK: - Private properties
+
+    // MARK: - Private properties
     private let viewModel = UserFinanceViewModel()
-    
+
     private lazy var salaryLabel = makeLabel(text: Constants.salaryLabelText)
-    
+
     private lazy var expensesLabel = makeLabel(text: Constants.expensesLabelText)
-    
+
     private lazy var salaryTField = makeTextField(placeholder: Constants.tFieldPlaceholder)
-    
+
     private lazy var expensesTField = makeTextField(placeholder: Constants.tFieldPlaceholder)
-    
+
     private let navButton: UIButton = {
         let button = UIButton()
         button.setTitle("Далее", for: .normal)
@@ -42,8 +41,8 @@ final class InputViewController: UIViewController {
         button.alpha = 0
         return button
     }()
-    
-    //MARK: - Lifecycle methods
+
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -51,18 +50,18 @@ final class InputViewController: UIViewController {
         setConstraints()
         setupTFields()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         settingViewCorners()
     }
-    
-    //MARK: - Private methods
-    private func setupTFields(){
+
+    // MARK: - Private methods
+    private func setupTFields() {
         salaryTField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         expensesTField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
-    
+
     @objc private func textFieldDidChange(_ textField: UITextField) {
         if salaryTField.text?.isEmpty == false, expensesTField.text?.isEmpty == false {
             UIView.animate(withDuration: 0.3) {
@@ -76,14 +75,14 @@ final class InputViewController: UIViewController {
             navButton.isEnabled = false
         }
     }
-    
-    private func settingViewCorners(){
+
+    private func settingViewCorners() {
         salaryTField.layer.cornerRadius = salaryTField.frame.height / 2
         expensesTField.layer.cornerRadius = expensesTField.frame.height / 2
         navButton.layer.cornerRadius = navButton.frame.height / 2
     }
-    
-    private func setupUI(){
+
+    private func setupUI() {
         view.addSubview(salaryLabel)
         view.addSubview(salaryTField)
         view.addSubview(expensesLabel)
@@ -91,44 +90,44 @@ final class InputViewController: UIViewController {
         view.addSubview(navButton)
         navButton.addTarget(self, action: #selector(navButtonTapped), for: .touchUpInside)
     }
-    
-    @objc private func navButtonTapped(){
+
+    @objc private func navButtonTapped() {
         viewModel.handleInputData(salary: salaryTField.text, expenses: expensesTField.text)
         let detailVC = DetailViewController(viewModel: viewModel)
         UserDefaults.standard.set(true, forKey: "wasLaunchedBefore")
         self.navigationController?.setViewControllers([detailVC], animated: true)
     }
-    
-    private func setConstraints(){
+
+    private func setConstraints() {
         salaryLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(Constants.viewVerticalOffset)
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
         }
-        
+
         salaryTField.snp.makeConstraints { make in
             make.top.equalTo(salaryLabel.snp.bottom).offset(Constants.viewVerticalOffset)
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.viewHeight)
         }
-        
+
         expensesLabel.snp.makeConstraints { make in
             make.top.equalTo(salaryTField.snp.bottom).offset(Constants.viewVerticalOffset)
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
         }
-        
+
         expensesTField.snp.makeConstraints { make in
             make.top.equalTo(expensesLabel.snp.bottom).offset(Constants.viewVerticalOffset)
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.viewHeight)
         }
-        
+
         navButton.snp.makeConstraints { make in
             make.top.equalTo(expensesTField.snp.bottom).offset(Constants.viewVerticalOffset)
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.viewHeight)
         }
     }
-    
+
     private func makeTextField(placeholder: String) -> UITextField {
         let tField = UITextField()
         let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: tField.frame.height))
@@ -146,7 +145,7 @@ final class InputViewController: UIViewController {
                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText])
         return tField
     }
-    
+
     private func makeLabel(text: String) -> UILabel {
         let label = UILabel()
         label.text = text

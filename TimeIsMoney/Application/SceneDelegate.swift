@@ -6,35 +6,32 @@
 // Created by Alexander Kist on 16.11.2023.
 //
 
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
+
         let window = UIWindow(windowScene: windowScene)
         let navigationController = UINavigationController()
         window.rootViewController = navigationController
         self.window = window
 
         if UserDefaults.standard.bool(forKey: "wasLaunchedBefore") {
-            
+
             let viewModel = UserFinanceViewModel()
             let detailVC = DetailViewController(viewModel: viewModel)
             navigationController.viewControllers = [detailVC]
         } else {
-            
+
             let inputVC = InputViewController()
             navigationController.viewControllers = [inputVC]
-            
-           
+
         }
-        
+
         self.window?.makeKeyAndVisible()
     }
 
@@ -66,6 +63,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-
 }
-
