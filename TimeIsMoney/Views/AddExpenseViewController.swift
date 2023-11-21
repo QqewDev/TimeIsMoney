@@ -6,7 +6,6 @@
 // Created by Alexander Kist on 16.11.2023.
 //
 
-
 import UIKit
 
 private enum Constants {
@@ -21,23 +20,23 @@ private enum Constants {
 }
 
 final class AddExpenseViewController: UIViewController {
-    
-    //MARK: Init
+
+    // MARK: - Init
     init(viewModel: UserFinanceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("Error")
     }
-    
-    //MARK: - Private properties
+
+    // MARK: - Private properties
     private let viewModel: UserFinanceViewModel
-    
+
     private lazy var purchaseTitleTField = makeTextField(placeholder: Constants.purchasePlaceholder, keyboardType: .default)
     private lazy var purchaseCostTField = makeTextField(placeholder: Constants.costPlaceholder, keyboardType: .decimalPad)
-    
+
     private let saveButton: UIButton = {
         let button = UIButton()
         button.setTitle(Constants.saveButtonTitle, for: .normal)
@@ -45,64 +44,64 @@ final class AddExpenseViewController: UIViewController {
         button.backgroundColor = .backgroundText
         return button
     }()
-    
+
     private let purchaseDate = Date()
-    
+
+    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = .mainGreen
         setupViews()
         setConstraints()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         settingViewCorners()
     }
-    
-    private func settingViewCorners(){
+
+    private func settingViewCorners() {
         purchaseTitleTField.layer.cornerRadius = purchaseTitleTField.frame.height / 2
         purchaseCostTField.layer.cornerRadius = purchaseCostTField.frame.height / 2
         saveButton.layer.cornerRadius = saveButton.frame.height / 2
     }
-    
-    private func setupViews(){
+
+    private func setupViews() {
         view.addSubview(purchaseCostTField)
         view.addSubview(purchaseTitleTField)
         view.addSubview(saveButton)
-        
+
         purchaseTitleTField.becomeFirstResponder()
-        
+
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
-    
-    @objc func saveButtonTapped(_ sender: UIButton) {
+
+    @objc private func saveButtonTapped(_ sender: UIButton) {
         viewModel.handleAddedExpense(title: purchaseTitleTField.text, cost: purchaseCostTField.text, purchaseDate: Date())
         dismiss(animated: true, completion: nil)
     }
-    
-    private func setConstraints(){
+
+    private func setConstraints() {
         purchaseTitleTField.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(Constants.viewVerticalOffset)
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.tFieldHeight)
         }
-        
+
         purchaseCostTField.snp.makeConstraints { make in
             make.top.equalTo(purchaseTitleTField.snp.bottom).offset(Constants.viewVerticalOffset)
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.tFieldHeight)
         }
-        
+
         saveButton.snp.makeConstraints { make in
             make.top.equalTo(purchaseCostTField.snp.bottom).offset(Constants.viewVerticalOffset)
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.buttonSize)
         }
     }
-    
-    
+
     private func makeTextField(placeholder: String, keyboardType: UIKeyboardType) -> UITextField {
         let tField = UITextField()
         let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: tField.frame.height))
@@ -121,5 +120,5 @@ final class AddExpenseViewController: UIViewController {
                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText.withAlphaComponent(0.4)])
         return tField
     }
-    
+
 }

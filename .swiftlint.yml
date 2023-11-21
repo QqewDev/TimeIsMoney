@@ -1,0 +1,17 @@
+disabled_rules:
+  - colon
+  - comma
+  - control_statement
+#  - trailing_whitespace
+opt_in_rules:
+  - empty_count
+#  - missing_docs
+included: # include directories
+    TimeIsMoney
+excluded:
+  - Carthage
+  - Pods
+  - Source/ExcludedFolder
+  - Source/ExcludedFile.swift
+line_length: 200
+warning_threshold: 300

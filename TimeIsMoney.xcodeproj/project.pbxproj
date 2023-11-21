@@ -12,7 +12,7 @@
 		46EAAE142B091B52003042E8 /* ExpensesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE132B091B52003042E8 /* ExpensesListViewController.swift */; };
 		46EAAE162B0A7D8C003042E8 /* ExpensesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE152B0A7D8C003042E8 /* ExpensesListViewModel.swift */; };
 		46EAAE182B0A7F90003042E8 /* ExpensesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE172B0A7F90003042E8 /* ExpensesCell.swift */; };
-		46EAAE1B2B0BC6E0003042E8 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE1A2B0BC6E0003042E8 /* HeaderView.swift */; };
+		46EAAE202B0D1D30003042E8 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 46EAAE1F2B0D1D30003042E8 /* .swiftlint.yml */; };
 		46FE95482B068190006924EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FE95472B068190006924EB /* AppDelegate.swift */; };
 		46FE954A2B068190006924EB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FE95492B068190006924EB /* SceneDelegate.swift */; };
 		46FE95512B068191006924EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46FE95502B068191006924EB /* Assets.xcassets */; };
@@ -33,7 +33,7 @@
 		46EAAE132B091B52003042E8 /* ExpensesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesListViewController.swift; sourceTree = "<group>"; };
 		46EAAE152B0A7D8C003042E8 /* ExpensesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesListViewModel.swift; sourceTree = "<group>"; };
 		46EAAE172B0A7F90003042E8 /* ExpensesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesCell.swift; sourceTree = "<group>"; };
-		46EAAE1A2B0BC6E0003042E8 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		46EAAE1F2B0D1D30003042E8 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		46FE95442B068190006924EB /* TimeIsMoney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TimeIsMoney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46FE95472B068190006924EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46FE95492B068190006924EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -104,7 +104,6 @@
 			children = (
 				46EAAE132B091B52003042E8 /* ExpensesListViewController.swift */,
 				46EAAE172B0A7F90003042E8 /* ExpensesCell.swift */,
-				46EAAE1A2B0BC6E0003042E8 /* HeaderView.swift */,
 			);
 			path = ExpensesList;
 			sourceTree = "<group>";
@@ -113,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				46FE95462B068190006924EB /* TimeIsMoney */,
+				46EAAE1F2B0D1D30003042E8 /* .swiftlint.yml */,
 				46FE95452B068190006924EB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -166,6 +166,7 @@
 				46FE95402B068190006924EB /* Sources */,
 				46FE95412B068190006924EB /* Frameworks */,
 				46FE95422B068190006924EB /* Resources */,
+				46EAAE1C2B0D1931003042E8 /* Build with SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -223,11 +224,34 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46EAAE202B0D1D30003042E8 /* .swiftlint.yml in Resources */,
 				46FE95512B068191006924EB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		46EAAE1C2B0D1931003042E8 /* Build with SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build with SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		46FE95402B068190006924EB /* Sources */ = {
@@ -243,7 +267,6 @@
 				46FE956A2B06858E006924EB /* SettingsViewController.swift in Sources */,
 				46EAAE142B091B52003042E8 /* ExpensesListViewController.swift in Sources */,
 				46EAAE0A2B068925003042E8 /* Double+Extension.swift in Sources */,
-				46EAAE1B2B0BC6E0003042E8 /* HeaderView.swift in Sources */,
 				46EAAE182B0A7F90003042E8 /* ExpensesCell.swift in Sources */,
 				46FE956E2B068624006924EB /* UserFinanceModel.swift in Sources */,
 				46EAAE162B0A7D8C003042E8 /* ExpensesListViewModel.swift in Sources */,
@@ -381,6 +404,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MG7VG49PJM;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TimeIsMoney/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -409,6 +433,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MG7VG49PJM;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TimeIsMoney/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
