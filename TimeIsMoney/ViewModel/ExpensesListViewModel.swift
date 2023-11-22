@@ -19,6 +19,8 @@ private enum Constants {
 
 final class ExpensesListViewModel {
 
+    weak var coordinator : AppCoordinator!
+
     // MARK: - Public variables
     public  var items: [String: [DailyExpenseRealmModel]] = [:]
 

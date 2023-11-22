@@ -9,20 +9,29 @@
 import Foundation
 import UIKit
 
-private enum Constants {
-    static let viewHeight: CGFloat = 50
-    static let viewVerticalOffset: CGFloat = 20
-    static let viewHorizontalInset: CGFloat = 20
-    static let salaryLabelText: String = "Введите зарплату"
-    static let expensesLabelText: String = "Введите ежемесячные\nтраты"
-    static let tFieldPlaceholder: String = "000000"
-
-}
-
 final class InputViewController: UIViewController {
 
+    weak var coordinator: AppCoordinator?
+
+    init(viewModel: UserFinanceViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("Error")
+    }
     // MARK: - Private properties
-    private let viewModel = UserFinanceViewModel()
+    private enum Constants {
+        static let viewHeight: CGFloat = 50
+        static let viewVerticalOffset: CGFloat = 20
+        static let viewHorizontalInset: CGFloat = 20
+        static let salaryLabelText: String = "Введите зарплату"
+        static let expensesLabelText: String = "Введите ежемесячные\nтраты"
+        static let tFieldPlaceholder: String = "000000"
+    }
+
+    private let viewModel: UserFinanceViewModel
 
     private lazy var salaryLabel = makeLabel(text: Constants.salaryLabelText)
 
@@ -93,9 +102,7 @@ final class InputViewController: UIViewController {
 
     @objc private func navButtonTapped() {
         viewModel.handleInputData(salary: salaryTField.text, expenses: expensesTField.text)
-        let detailVC = DetailViewController(viewModel: viewModel)
-        UserDefaults.standard.set(true, forKey: "wasLaunchedBefore")
-        self.navigationController?.setViewControllers([detailVC], animated: true)
+        coordinator?.showDetail(viewModel: viewModel)
     }
 
     private func setConstraints() {
@@ -151,7 +158,7 @@ final class InputViewController: UIViewController {
         label.text = text
         label.textColor = .mainGreen
         label.numberOfLines = 0
-        label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+        label.font = UIFont.largeTitle()
         return label
     }
 }
