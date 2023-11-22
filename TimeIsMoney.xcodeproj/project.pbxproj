@@ -13,6 +13,9 @@
 		46EAAE162B0A7D8C003042E8 /* ExpensesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE152B0A7D8C003042E8 /* ExpensesListViewModel.swift */; };
 		46EAAE182B0A7F90003042E8 /* ExpensesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE172B0A7F90003042E8 /* ExpensesCell.swift */; };
 		46EAAE202B0D1D30003042E8 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 46EAAE1F2B0D1D30003042E8 /* .swiftlint.yml */; };
+		46EAAE222B0E3C8D003042E8 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE212B0E3C8D003042E8 /* UIFont+Extension.swift */; };
+		46EAAE252B0E4673003042E8 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE242B0E4673003042E8 /* Coordinator.swift */; };
+		46EAAE272B0E478F003042E8 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE262B0E478F003042E8 /* AppCoordinator.swift */; };
 		46FE95482B068190006924EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FE95472B068190006924EB /* AppDelegate.swift */; };
 		46FE954A2B068190006924EB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FE95492B068190006924EB /* SceneDelegate.swift */; };
 		46FE95512B068191006924EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46FE95502B068191006924EB /* Assets.xcassets */; };
@@ -34,6 +37,9 @@
 		46EAAE152B0A7D8C003042E8 /* ExpensesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesListViewModel.swift; sourceTree = "<group>"; };
 		46EAAE172B0A7F90003042E8 /* ExpensesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesCell.swift; sourceTree = "<group>"; };
 		46EAAE1F2B0D1D30003042E8 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		46EAAE212B0E3C8D003042E8 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
+		46EAAE242B0E4673003042E8 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		46EAAE262B0E478F003042E8 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		46FE95442B068190006924EB /* TimeIsMoney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TimeIsMoney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46FE95472B068190006924EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46FE95492B068190006924EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				46EAAE092B068925003042E8 /* Double+Extension.swift */,
+				46EAAE212B0E3C8D003042E8 /* UIFont+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -108,6 +115,15 @@
 			path = ExpensesList;
 			sourceTree = "<group>";
 		};
+		46EAAE232B0E4662003042E8 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				46EAAE242B0E4673003042E8 /* Coordinator.swift */,
+				46EAAE262B0E478F003042E8 /* AppCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
 		46FE953B2B068190006924EB = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +144,7 @@
 		46FE95462B068190006924EB /* TimeIsMoney */ = {
 			isa = PBXGroup;
 			children = (
+				46EAAE232B0E4662003042E8 /* Coordinator */,
 				46FE955B2B06819E006924EB /* Application */,
 				46EAAE062B0688FE003042E8 /* Extensions */,
 				46EAAE052B0688CE003042E8 /* Models */,
@@ -258,8 +275,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46EAAE222B0E3C8D003042E8 /* UIFont+Extension.swift in Sources */,
 				46FE95482B068190006924EB /* AppDelegate.swift in Sources */,
+				46EAAE252B0E4673003042E8 /* Coordinator.swift in Sources */,
 				46FE95682B06850F006924EB /* DetailViewController.swift in Sources */,
+				46EAAE272B0E478F003042E8 /* AppCoordinator.swift in Sources */,
 				46FE956C2B0685D7006924EB /* UserFinanceViewModel.swift in Sources */,
 				46FE95702B06862E006924EB /* UserFinanceRealmModel.swift in Sources */,
 				46FE954A2B068190006924EB /* SceneDelegate.swift in Sources */,

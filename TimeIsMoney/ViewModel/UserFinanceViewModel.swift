@@ -73,16 +73,24 @@ final class UserFinanceViewModel {
               let expensesDouble = Double(expensesText) else { return }
 
         setData(salary: salaryDouble, monthlyExpenses: expensesDouble, newExpense: nil)
+        UserDefaults.standard.set(true, forKey: "wasLaunchedBefore")
     }
 
     func handleUpdatedData(salary: String?, expenses: String?) {
-        guard let salaryText = salary,
-              let expensesText = expenses else { return }
+        var newSalary: Double?
+        var newExpenses: Double?
 
-        guard let newSalary = Double(salaryText),
-              let newExpenses = Double(expensesText) else { return }
+        if let salaryText = salary {
+            newSalary = Double(salaryText)
+        }
 
-        updateSalaryAndExpenses(salary: newSalary, monthlyExpenses: newExpenses)
+        if let expensesText = expenses {
+            newExpenses = Double(expensesText)
+        }
+
+        guard newSalary != nil || newExpenses != nil else { return }
+
+        updateSalaryAndExpenses(salary: newSalary ?? Double(self.salary), monthlyExpenses: newExpenses ?? self.monthlyExpenses)
     }
 
     func handleAddedExpense(title: String?, cost: String?, purchaseDate: Date?) {
@@ -171,7 +179,7 @@ final class UserFinanceViewModel {
         realmModel.dailyExpenses.append(objectsIn: data.dailyExpenses.map { dailyExpense in
             let realmDailyExpense = DailyExpenseRealmModel()
             realmDailyExpense.name = dailyExpense.name
-            realmDailyExpense.coast = dailyExpense.coast
+            realmDailyExpense.cost = dailyExpense.coast
             realmDailyExpense.date = dailyExpense.date
             return realmDailyExpense
         })
@@ -191,7 +199,7 @@ final class UserFinanceViewModel {
             throw RealmDBError.failedToLoadData
         }
 
-        let dailyExpenses = realmModel.dailyExpenses.map { DailyExpense(name: $0.name, coast: $0.coast, date: $0.date) }
+        let dailyExpenses = realmModel.dailyExpenses.map { DailyExpense(name: $0.name, coast: $0.cost, date: $0.date) }
 
         data = UserFinanceModel(salary: realmModel.salary, monthlyExpenses: realmModel.monthlyExpenses, dailyExpenses: Array(dailyExpenses))
     }

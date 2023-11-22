@@ -10,6 +10,9 @@ import UIKit
 
 final class ExpensesListViewController: UIViewController {
 
+    weak var coordinator: AppCoordinator?
+
+    // MARK: - Init
     init(viewModel: ExpensesListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -24,6 +27,7 @@ final class ExpensesListViewController: UIViewController {
 
     private var expensesTableView = UITableView()
 
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -34,7 +38,6 @@ final class ExpensesListViewController: UIViewController {
     }
 
     // MARK: - Private methods
-
     private func setupTableView() {
         expensesTableView.dataSource = self
         expensesTableView.showsVerticalScrollIndicator = false

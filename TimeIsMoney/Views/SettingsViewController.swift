@@ -10,23 +10,10 @@ import Foundation
 import UIKit
 import SnapKit
 
-private enum Constants {
-    static let salaryPlaceholder: String = "Изменить зарплату"
-    static let expensesPlaceholder: String = "Изменить зарплату"
-    static let deleteLabel: String = "Удалить историю трат"
-    static let saveButtonTitle: String = "Сохранить"
-    static let deleteButtonImageName: String = "trash.fill"
-    static let viewVerticalOffset: CGFloat = 20
-    static let viewHorizontalInset: CGFloat = 20
-    static let tFieldHeight: CGFloat = 50
-    static let buttonSize: CGFloat = 50
-    static let borderWidth: CGFloat = 1
-}
-
 final class SettingsViewController: UIViewController {
 
-    private let viewModel: UserFinanceViewModel
-
+    weak var coordinator: AppCoordinator?
+    // MARK: - Init
     init(viewModel: UserFinanceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -35,6 +22,22 @@ final class SettingsViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("")
     }
+
+    // MARK: - Private properties
+    private enum Constants {
+        static let salaryPlaceholder: String = "Изменить зарплату"
+        static let expensesPlaceholder: String = "Изменить ежемесячные траты "
+        static let deleteLabel: String = "Удалить историю трат"
+        static let saveButtonTitle: String = "Сохранить"
+        static let deleteButtonImageName: String = "trash.fill"
+        static let viewVerticalOffset: CGFloat = 20
+        static let viewHorizontalInset: CGFloat = 20
+        static let tFieldHeight: CGFloat = 50
+        static let buttonSize: CGFloat = 50
+        static let borderWidth: CGFloat = 1
+    }
+
+    private let viewModel: UserFinanceViewModel
 
     private lazy var salaryTField = makeTextField(placeholder: Constants.salaryPlaceholder)
 
@@ -59,6 +62,7 @@ final class SettingsViewController: UIViewController {
         return button
     }()
 
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -74,6 +78,7 @@ final class SettingsViewController: UIViewController {
         deleteButton.layer.cornerRadius = deleteButton.frame.height / 2
     }
 
+    // MARK: - Private methods
     private func setConstraints() {
         salaryTField.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(Constants.viewVerticalOffset)
@@ -124,12 +129,12 @@ final class SettingsViewController: UIViewController {
 
     @objc private func saveButtonTapped(_ sender: UIButton) {
         viewModel.handleUpdatedData(salary: salaryTField.text, expenses: expensesTField.text)
-        navigationController?.popViewController(animated: true)
+        coordinator?.didFinishActions()
     }
 
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         viewModel.deleteAllDailyExpenses()
-        navigationController?.popViewController(animated: true)
+        coordinator?.didFinishActions()
     }
 
     private func makeTextField(placeholder: String) -> UITextField {

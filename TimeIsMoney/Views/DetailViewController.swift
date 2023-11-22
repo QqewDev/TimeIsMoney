@@ -9,17 +9,6 @@
 import Foundation
 import UIKit
 
-private enum Constants {
-    static let titleText: String = "Сегодня"
-    static let settingsImageName: String = "gearshape"
-    static let expensesListImageName: String = "list.dash"
-    static let addButtonTitle: String = "Внести трату"
-    static let viewVerticalOffset: CGFloat = 20
-    static let viewHorizontalInset: CGFloat = 20
-    static let borderHeightMultiplier: CGFloat = 0.1
-    static let mainColor: UIColor = .mainGreen
-}
-
 final class DetailViewController: UIViewController {
 
     // MARK: Init
@@ -32,16 +21,27 @@ final class DetailViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("Error")
     }
-
+    weak var coordinator: AppCoordinator?
     // MARK: - Private properties
+    private enum Constants {
+        static let titleText: String = "Сегодня"
+        static let settingsImageName: String = "gearshape"
+        static let expensesListImageName: String = "list.dash"
+        static let addButtonTitle: String = "Внести трату"
+        static let viewVerticalOffset: CGFloat = 20
+        static let viewHorizontalInset: CGFloat = 20
+        static let borderHeightMultiplier: CGFloat = 0.1
+        static let mainColor: UIColor = .mainGreen
+    }
+
     private let viewModel: UserFinanceViewModel
 
     private var timer: Timer?
 
-    private lazy var salaryInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.preferredFont(forTextStyle: .largeTitle))
-    private lazy var expensesInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.preferredFont(forTextStyle: .largeTitle))
-    private lazy var availableMoneyInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.preferredFont(forTextStyle: .largeTitle))
-    private lazy var earnedMoneyInfoLabel = makeLabel(textColor: Constants.mainColor, font: UIFont.preferredFont(forTextStyle: .largeTitle))
+    private lazy var salaryInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.largeTitle())
+    private lazy var expensesInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.largeTitle())
+    private lazy var availableMoneyInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.largeTitle())
+    private lazy var earnedMoneyInfoLabel = makeLabel(textColor: Constants.mainColor, font: UIFont.largeTitle())
 
     private let addExpenseButton: UIButton = {
         let button = UIButton()
@@ -105,12 +105,7 @@ final class DetailViewController: UIViewController {
     }
 
     @objc private func addButtonTapped() {
-        let addExpenseVC = AddExpenseViewController(viewModel: viewModel)
-        if let sheet = addExpenseVC.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.prefersGrabberVisible = true
-        }
-        present(addExpenseVC, animated: true)
+        coordinator?.showAddExpense(viewModel: viewModel)
     }
 
     private func setupNavBar() {
@@ -129,14 +124,11 @@ final class DetailViewController: UIViewController {
     }
 
     @objc func settingsButtonTapped() {
-        let settingsVC = SettingsViewController(viewModel: viewModel)
-        navigationController?.pushViewController(settingsVC, animated: true)
+        coordinator?.showSettings(viewModel: viewModel)
     }
 
     @objc func expensesListButtonTapped() {
-        let expensesListVM = ExpensesListViewModel()
-        let expensesListVC = ExpensesListViewController(viewModel: expensesListVM)
-        navigationController?.pushViewController(expensesListVC, animated: true)
+        coordinator?.showExpensesList()
     }
 
     private func setConstraints() {

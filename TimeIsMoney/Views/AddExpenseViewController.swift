@@ -8,17 +8,6 @@
 
 import UIKit
 
-private enum Constants {
-    static let purchasePlaceholder: String = "Название покупки"
-    static let costPlaceholder: String = "Стоимость покупки"
-    static let saveButtonTitle: String = "Внести"
-    static let viewVerticalOffset: CGFloat = 20
-    static let viewHorizontalInset: CGFloat = 20
-    static let tFieldHeight: CGFloat = 50
-    static let buttonSize: CGFloat = 50
-    static let borderWidth: CGFloat = 1
-}
-
 final class AddExpenseViewController: UIViewController {
 
     // MARK: - Init
@@ -32,6 +21,17 @@ final class AddExpenseViewController: UIViewController {
     }
 
     // MARK: - Private properties
+    private enum Constants {
+        static let purchasePlaceholder: String = "Название покупки"
+        static let costPlaceholder: String = "Стоимость покупки"
+        static let saveButtonTitle: String = "Внести"
+        static let viewVerticalOffset: CGFloat = 20
+        static let viewHorizontalInset: CGFloat = 20
+        static let tFieldHeight: CGFloat = 50
+        static let buttonSize: CGFloat = 50
+        static let borderWidth: CGFloat = 1
+    }
+
     private let viewModel: UserFinanceViewModel
 
     private lazy var purchaseTitleTField = makeTextField(placeholder: Constants.purchasePlaceholder, keyboardType: .default)
@@ -61,6 +61,7 @@ final class AddExpenseViewController: UIViewController {
         settingViewCorners()
     }
 
+    // MARK: - Private methods
     private func settingViewCorners() {
         purchaseTitleTField.layer.cornerRadius = purchaseTitleTField.frame.height / 2
         purchaseCostTField.layer.cornerRadius = purchaseCostTField.frame.height / 2

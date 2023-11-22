@@ -55,6 +55,6 @@ final class ExpensesCell: UITableViewCell {
 
     func configureViews(with expense: DailyExpenseRealmModel) {
         nameLabel.text = expense.name
-        priceLabel.text = "\(expense.coast)₽"
+        priceLabel.text = "\(expense.cost)₽"
     }
 }
