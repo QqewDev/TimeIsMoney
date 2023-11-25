@@ -47,7 +47,7 @@ final class UserFinanceViewModel {
     }
 
     private var additionalExpenses: Double {
-        return data?.dailyExpenses.reduce(0, { $0 + $1.coast }) ?? 0.0
+        return data?.dailyExpenses.reduce(0, { $0 + $1.cost }) ?? 0.0
     }
 
     private var data: UserFinanceModel?
@@ -101,7 +101,7 @@ final class UserFinanceViewModel {
 
         guard let purchaseDate = purchaseDate else { return }
 
-        let dailyExpense = DailyExpense(name: titleText, coast: costDouble, date: purchaseDate)
+        let dailyExpense = DailyExpense(name: titleText, cost: costDouble, date: purchaseDate)
         setData(salary: self.salary, monthlyExpenses: self.monthlyExpenses, newExpense: dailyExpense)
     }
 
@@ -179,7 +179,7 @@ final class UserFinanceViewModel {
         realmModel.dailyExpenses.append(objectsIn: data.dailyExpenses.map { dailyExpense in
             let realmDailyExpense = DailyExpenseRealmModel()
             realmDailyExpense.name = dailyExpense.name
-            realmDailyExpense.cost = dailyExpense.coast
+            realmDailyExpense.cost = dailyExpense.cost
             realmDailyExpense.date = dailyExpense.date
             return realmDailyExpense
         })
@@ -199,7 +199,7 @@ final class UserFinanceViewModel {
             throw RealmDBError.failedToLoadData
         }
 
-        let dailyExpenses = realmModel.dailyExpenses.map { DailyExpense(name: $0.name, coast: $0.cost, date: $0.date) }
+        let dailyExpenses = realmModel.dailyExpenses.map { DailyExpense(name: $0.name, cost: $0.cost, date: $0.date) }
 
         data = UserFinanceModel(salary: realmModel.salary, monthlyExpenses: realmModel.monthlyExpenses, dailyExpenses: Array(dailyExpenses))
     }

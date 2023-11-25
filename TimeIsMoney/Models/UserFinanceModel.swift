@@ -16,7 +16,7 @@ struct UserFinanceModel {
 }
 struct DailyExpense {
     var name: String
-    var coast: Double
+    var cost: Double
     var date: Date
 }
 extension UserFinanceModel {

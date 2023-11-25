@@ -34,16 +34,11 @@ final class AddExpenseViewController: UIViewController {
 
     private let viewModel: UserFinanceViewModel
 
-    private lazy var purchaseTitleTField = makeTextField(placeholder: Constants.purchasePlaceholder, keyboardType: .default)
-    private lazy var purchaseCostTField = makeTextField(placeholder: Constants.costPlaceholder, keyboardType: .decimalPad)
+    private let purchaseTitleTField = CustomTextField(fieldType: .purchaseName)
 
-    private let saveButton: UIButton = {
-        let button = UIButton()
-        button.setTitle(Constants.saveButtonTitle, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .backgroundText
-        return button
-    }()
+    private let purchaseCostTField = CustomTextField(fieldType: .purchasePrice)
+
+    private let saveButton = CustomTextButton(title: Constants.saveButtonTitle, hasBackground: true, fontSize: .big, bgColor: .backgroundText, textColor: .white)
 
     private let purchaseDate = Date()
 
@@ -56,18 +51,7 @@ final class AddExpenseViewController: UIViewController {
         setConstraints()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        settingViewCorners()
-    }
-
     // MARK: - Private methods
-    private func settingViewCorners() {
-        purchaseTitleTField.layer.cornerRadius = purchaseTitleTField.frame.height / 2
-        purchaseCostTField.layer.cornerRadius = purchaseCostTField.frame.height / 2
-        saveButton.layer.cornerRadius = saveButton.frame.height / 2
-    }
-
     private func setupViews() {
         view.addSubview(purchaseCostTField)
         view.addSubview(purchaseTitleTField)
@@ -102,24 +86,4 @@ final class AddExpenseViewController: UIViewController {
             make.height.equalTo(Constants.buttonSize)
         }
     }
-
-    private func makeTextField(placeholder: String, keyboardType: UIKeyboardType) -> UITextField {
-        let tField = UITextField()
-        let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: tField.frame.height))
-        tField.leftView = spacingView
-        tField.leftViewMode = .always
-        tField.rightView = spacingView
-        tField.rightViewMode = .always
-        tField.borderStyle = .roundedRect
-        tField.keyboardType = keyboardType
-        tField.backgroundColor = .mainGreen
-        tField.textColor = .backgroundText
-        tField.font = UIFont.preferredFont(forTextStyle: .title2)
-        tField.layer.borderWidth = 1.0
-        tField.layer.borderColor = UIColor.backgroundText.cgColor
-        tField.attributedPlaceholder = NSAttributedString(string: placeholder,
-                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText.withAlphaComponent(0.4)])
-        return tField
-    }
-
 }

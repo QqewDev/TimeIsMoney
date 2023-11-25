@@ -3,4 +3,54 @@
    uuid = "D4340C0A-F64C-45A1-AD2F-14E1D4F4B363"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "61C84531-BD9C-4661-A7EE-4DA36D0964B9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TimeIsMoney/ViewControllers/InputInfoViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "InputViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "61C84531-BD9C-4661-A7EE-4DA36D0964B9 - ad3d76b4a4e3ffed"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TimeIsMoney.InputViewController.init(viewModel: TimeIsMoney.UserFinanceViewModel) -&gt; TimeIsMoney.InputViewController"
+                  moduleName = "TimeIsMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewControllers/InputInfoViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "284">
+               </Location>
+               <Location
+                  uuid = "61C84531-BD9C-4661-A7EE-4DA36D0964B9 - bba224793da84168"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TimeIsMoney.InputViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;TimeIsMoney.InputViewController&gt;"
+                  moduleName = "TimeIsMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewControllers/InputInfoViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "272">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -10,6 +10,11 @@ import UIKit
 
 final class ExpensesListViewController: UIViewController {
 
+    private enum Constants {
+        static let backgroundColor: UIColor = .systemBackground
+        static let mainColor: UIColor = .mainGreen
+    }
+
     weak var coordinator: AppCoordinator?
 
     // MARK: - Init
@@ -30,7 +35,7 @@ final class ExpensesListViewController: UIViewController {
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = Constants.backgroundColor
         title = "Траты"
         setupTableView()
         setConstraints()
@@ -42,7 +47,7 @@ final class ExpensesListViewController: UIViewController {
         expensesTableView.dataSource = self
         expensesTableView.showsVerticalScrollIndicator = false
         expensesTableView.showsHorizontalScrollIndicator = false
-        expensesTableView.backgroundColor = .systemBackground
+        expensesTableView.backgroundColor = Constants.backgroundColor
         expensesTableView.register(ExpensesCell.self, forCellReuseIdentifier: "\(ExpensesCell.self)")
         expensesTableView.allowsSelection = false
 
@@ -56,8 +61,8 @@ final class ExpensesListViewController: UIViewController {
     }
 
     private func setupNavBar() {
-        navigationController?.navigationBar.tintColor = .mainGreen
-        navigationController?.navigationBar.barTintColor = .systemBackground
+        navigationController?.navigationBar.tintColor = Constants.mainColor
+        navigationController?.navigationBar.barTintColor = Constants.backgroundColor
     }
 }
 

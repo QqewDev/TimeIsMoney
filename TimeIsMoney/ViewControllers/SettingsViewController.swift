@@ -35,47 +35,31 @@ final class SettingsViewController: UIViewController {
         static let tFieldHeight: CGFloat = 50
         static let buttonSize: CGFloat = 50
         static let borderWidth: CGFloat = 1
+        static let mainColor: UIColor = .mainGreen
+        static let bgTextColor: UIColor = .backgroundText
+        static let saveButtonTextColor: UIColor = .white
+        static let backgroundColor: UIColor = .systemBackground
     }
 
     private let viewModel: UserFinanceViewModel
 
-    private lazy var salaryTField = makeTextField(placeholder: Constants.salaryPlaceholder)
+    private let salaryTField = CustomTextField(fieldType: .salary)
 
-    private lazy var expensesTField = makeTextField(placeholder: Constants.expensesPlaceholder)
+    private let expensesTField = CustomTextField(fieldType: .expenses)
 
-    private lazy var deleteLabel = makeLabel(text: Constants.deleteLabel)
+    private let deleteLabel = CustomLabel(text: Constants.deleteLabel, isStatic: true, textColor: Constants.bgTextColor)
 
-    private let saveButton: UIButton = {
-        let button = UIButton()
-        button.setTitle(Constants.saveButtonTitle, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .mainGreen
-        return button
-    }()
+    private let saveButton = CustomTextButton(title: Constants.saveButtonTitle, hasBackground: true, fontSize: .big, bgColor: Constants.mainColor, textColor: Constants.saveButtonTextColor)
 
-    private let deleteButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: Constants.deleteButtonImageName), for: .normal)
-        button.tintColor = .mainGreen
-        button.layer.borderWidth = Constants.borderWidth
-        button.layer.borderColor = UIColor.mainGreen.cgColor
-        return button
-    }()
+    private let deleteButton = CustomImageButton(imageName: Constants.deleteButtonImageName, hasTint: true)
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = Constants.backgroundColor
         setupViews()
         setConstraints()
         setupNavBar()
-    }
-
-    override func viewWillLayoutSubviews() {
-        salaryTField.layer.cornerRadius = salaryTField.frame.height / 2
-        expensesTField.layer.cornerRadius = expensesTField.frame.height / 2
-        saveButton.layer.cornerRadius = saveButton.frame.height / 2
-        deleteButton.layer.cornerRadius = deleteButton.frame.height / 2
     }
 
     // MARK: - Private methods
@@ -135,32 +119,5 @@ final class SettingsViewController: UIViewController {
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         viewModel.deleteAllDailyExpenses()
         coordinator?.didFinishActions()
-    }
-
-    private func makeTextField(placeholder: String) -> UITextField {
-        let tField = UITextField()
-        let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: tField.frame.height))
-        tField.leftView = spacingView
-        tField.leftViewMode = .always
-        tField.rightView = spacingView
-        tField.rightViewMode = .always
-        tField.borderStyle = .roundedRect
-        tField.backgroundColor = .systemBackground
-        tField.textColor = .mainGreen
-        tField.font = UIFont.preferredFont(forTextStyle: .title2)
-        tField.layer.borderWidth = Constants.borderWidth
-        tField.layer.borderColor = UIColor.mainGreen.cgColor
-        tField.attributedPlaceholder = NSAttributedString(string: placeholder,
-                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText.withAlphaComponent(0.4)])
-        return tField
-    }
-
-    private func makeLabel(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.textColor = .backgroundText
-        label.numberOfLines = 0
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        return label
     }
 }

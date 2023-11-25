@@ -32,16 +32,21 @@ final class DetailViewController: UIViewController {
         static let viewHorizontalInset: CGFloat = 20
         static let borderHeightMultiplier: CGFloat = 0.1
         static let mainColor: UIColor = .mainGreen
+        static let bgTextColor: UIColor = .backgroundText
+        static let backgroundColor: UIColor = .systemBackground
     }
 
     private let viewModel: UserFinanceViewModel
 
     private var timer: Timer?
 
-    private lazy var salaryInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.largeTitle())
-    private lazy var expensesInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.largeTitle())
-    private lazy var availableMoneyInfoLabel = makeLabel(textColor: .backgroundText, font: UIFont.largeTitle())
-    private lazy var earnedMoneyInfoLabel = makeLabel(textColor: Constants.mainColor, font: UIFont.largeTitle())
+    private let salaryInfoLabel = CustomLabel(isStatic: false, textColor: Constants.bgTextColor)
+
+    private let expensesInfoLabel = CustomLabel(isStatic: false, textColor: Constants.bgTextColor)
+
+    private let availableMoneyInfoLabel = CustomLabel(isStatic: false, textColor: Constants.bgTextColor)
+
+    private let earnedMoneyInfoLabel = CustomLabel(isStatic: false, textColor: Constants.mainColor)
 
     private let addExpenseButton: UIButton = {
         let button = UIButton()
@@ -60,7 +65,7 @@ final class DetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = Constants.backgroundColor
         setupViews()
         setConstraints()
         setupNavBar()
@@ -163,14 +168,6 @@ final class DetailViewController: UIViewController {
             make.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(Constants.borderHeightMultiplier)
         }
-    }
-
-    private func makeLabel(textColor: UIColor, font: UIFont) -> UILabel {
-        let label = UILabel()
-        label.textColor = textColor
-        label.font = font
-        label.numberOfLines = 0
-        return label
     }
 }
 

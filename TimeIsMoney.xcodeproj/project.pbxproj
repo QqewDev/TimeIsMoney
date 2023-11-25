@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4698BDC52B123721003DCAC7 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BDC42B123721003DCAC7 /* CustomTextField.swift */; };
+		4698BDC72B1238DB003DCAC7 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BDC62B1238DB003DCAC7 /* CustomLabel.swift */; };
+		4698BDC92B1239D6003DCAC7 /* CustomTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BDC82B1239D6003DCAC7 /* CustomTextButton.swift */; };
+		4698BDCB2B123DDC003DCAC7 /* CustomImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BDCA2B123DDC003DCAC7 /* CustomImageButton.swift */; };
 		46EAAE0A2B068925003042E8 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE092B068925003042E8 /* Double+Extension.swift */; };
 		46EAAE0E2B068E05003042E8 /* AddExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE0D2B068E05003042E8 /* AddExpenseViewController.swift */; };
 		46EAAE142B091B52003042E8 /* ExpensesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE132B091B52003042E8 /* ExpensesListViewController.swift */; };
@@ -31,6 +35,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4698BDC42B123721003DCAC7 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		4698BDC62B1238DB003DCAC7 /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
+		4698BDC82B1239D6003DCAC7 /* CustomTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextButton.swift; sourceTree = "<group>"; };
+		4698BDCA2B123DDC003DCAC7 /* CustomImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageButton.swift; sourceTree = "<group>"; };
 		46EAAE092B068925003042E8 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		46EAAE0D2B068E05003042E8 /* AddExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseViewController.swift; sourceTree = "<group>"; };
 		46EAAE132B091B52003042E8 /* ExpensesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesListViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +75,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4698BDC32B123676003DCAC7 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				46EAAE192B0BC6A7003042E8 /* ExpensesList */,
+				46FE95652B0684E4006924EB /* InputInfoViewController.swift */,
+				46FE95672B06850F006924EB /* DetailViewController.swift */,
+				46FE95692B06858E006924EB /* SettingsViewController.swift */,
+				46EAAE0D2B068E05003042E8 /* AddExpenseViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		46EAAE052B0688CE003042E8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -88,11 +108,10 @@
 		46EAAE0B2B068B2D003042E8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				46FE95652B0684E4006924EB /* InputInfoViewController.swift */,
-				46FE95672B06850F006924EB /* DetailViewController.swift */,
-				46FE95692B06858E006924EB /* SettingsViewController.swift */,
-				46EAAE0D2B068E05003042E8 /* AddExpenseViewController.swift */,
-				46EAAE192B0BC6A7003042E8 /* ExpensesList */,
+				4698BDC42B123721003DCAC7 /* CustomTextField.swift */,
+				4698BDC62B1238DB003DCAC7 /* CustomLabel.swift */,
+				4698BDC82B1239D6003DCAC7 /* CustomTextButton.swift */,
+				4698BDCA2B123DDC003DCAC7 /* CustomImageButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -144,6 +163,7 @@
 		46FE95462B068190006924EB /* TimeIsMoney */ = {
 			isa = PBXGroup;
 			children = (
+				4698BDC32B123676003DCAC7 /* ViewControllers */,
 				46EAAE232B0E4662003042E8 /* Coordinator */,
 				46FE955B2B06819E006924EB /* Application */,
 				46EAAE062B0688FE003042E8 /* Extensions */,
@@ -276,13 +296,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				46EAAE222B0E3C8D003042E8 /* UIFont+Extension.swift in Sources */,
+				4698BDC92B1239D6003DCAC7 /* CustomTextButton.swift in Sources */,
+				4698BDC72B1238DB003DCAC7 /* CustomLabel.swift in Sources */,
 				46FE95482B068190006924EB /* AppDelegate.swift in Sources */,
 				46EAAE252B0E4673003042E8 /* Coordinator.swift in Sources */,
 				46FE95682B06850F006924EB /* DetailViewController.swift in Sources */,
 				46EAAE272B0E478F003042E8 /* AppCoordinator.swift in Sources */,
 				46FE956C2B0685D7006924EB /* UserFinanceViewModel.swift in Sources */,
+				4698BDCB2B123DDC003DCAC7 /* CustomImageButton.swift in Sources */,
 				46FE95702B06862E006924EB /* UserFinanceRealmModel.swift in Sources */,
 				46FE954A2B068190006924EB /* SceneDelegate.swift in Sources */,
+				4698BDC52B123721003DCAC7 /* CustomTextField.swift in Sources */,
 				46FE95662B0684E4006924EB /* InputInfoViewController.swift in Sources */,
 				46FE956A2B06858E006924EB /* SettingsViewController.swift in Sources */,
 				46EAAE142B091B52003042E8 /* ExpensesListViewController.swift in Sources */,

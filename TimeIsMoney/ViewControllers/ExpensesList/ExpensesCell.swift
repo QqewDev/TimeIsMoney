@@ -12,6 +12,7 @@ import SnapKit
 private enum Constants {
     static let viewVerticalInset: CGFloat  = 10
     static let viewHorizontalInset: CGFloat = 20
+    static let mainColor: UIColor = .mainGreen
 }
 
 final class ExpensesCell: UITableViewCell {
@@ -38,8 +39,8 @@ final class ExpensesCell: UITableViewCell {
 
         contentView.backgroundColor = .systemBackground
 
-        nameLabel.textColor = .mainGreen
-        priceLabel.textColor = .mainGreen
+        nameLabel.textColor = Constants.mainColor
+        priceLabel.textColor = Constants.mainColor
 
         contentView.addSubview(stackView)
     }

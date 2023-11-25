@@ -28,41 +28,29 @@ final class InputViewController: UIViewController {
         static let viewHorizontalInset: CGFloat = 20
         static let salaryLabelText: String = "Введите зарплату"
         static let expensesLabelText: String = "Введите ежемесячные\nтраты"
-        static let tFieldPlaceholder: String = "000000"
+        static let navButtonText: String = "Далее"
+        static let backgroundColor: UIColor = .systemBackground
     }
 
     private let viewModel: UserFinanceViewModel
 
-    private lazy var salaryLabel = makeLabel(text: Constants.salaryLabelText)
+    private let salaryLabel = CustomLabel(text: Constants.salaryLabelText, isStatic: true, textColor: .mainGreen)
 
-    private lazy var expensesLabel = makeLabel(text: Constants.expensesLabelText)
+    private let expensesLabel = CustomLabel(text: Constants.expensesLabelText, isStatic: true, textColor: .mainGreen)
 
-    private lazy var salaryTField = makeTextField(placeholder: Constants.tFieldPlaceholder)
+    private let salaryTField = CustomTextField(fieldType: .salary)
 
-    private lazy var expensesTField = makeTextField(placeholder: Constants.tFieldPlaceholder)
+    private let expensesTField = CustomTextField(fieldType: .expenses)
 
-    private let navButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Далее", for: .normal)
-        button.setTitleColor(.mainGreen, for: .normal)
-        button.backgroundColor = .backgroundText
-        button.isEnabled = false
-        button.alpha = 0
-        return button
-    }()
+    private let navButton = CustomTextButton(title: Constants.navButtonText, hasBackground: true, fontSize: .big, bgColor: .mainGreen, textColor: .white)
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = Constants.backgroundColor
         setupUI()
         setConstraints()
         setupTFields()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        settingViewCorners()
     }
 
     // MARK: - Private methods
@@ -83,12 +71,6 @@ final class InputViewController: UIViewController {
             }
             navButton.isEnabled = false
         }
-    }
-
-    private func settingViewCorners() {
-        salaryTField.layer.cornerRadius = salaryTField.frame.height / 2
-        expensesTField.layer.cornerRadius = expensesTField.frame.height / 2
-        navButton.layer.cornerRadius = navButton.frame.height / 2
     }
 
     private func setupUI() {
@@ -133,32 +115,5 @@ final class InputViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.viewHeight)
         }
-    }
-
-    private func makeTextField(placeholder: String) -> UITextField {
-        let tField = UITextField()
-        let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: tField.frame.height))
-        tField.leftView = spacingView
-        tField.leftViewMode = .always
-        tField.rightView = spacingView
-        tField.rightViewMode = .always
-        tField.borderStyle = .roundedRect
-        tField.backgroundColor = .systemBackground
-        tField.textColor = .mainGreen
-        tField.font = UIFont.preferredFont(forTextStyle: .title2)
-        tField.layer.borderWidth = 1.0
-        tField.layer.borderColor = UIColor.mainGreen.cgColor
-        tField.attributedPlaceholder = NSAttributedString(string: placeholder,
-                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText])
-        return tField
-    }
-
-    private func makeLabel(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.textColor = .mainGreen
-        label.numberOfLines = 0
-        label.font = UIFont.largeTitle()
-        return label
     }
 }
