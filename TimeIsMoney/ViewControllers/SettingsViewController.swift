@@ -14,7 +14,7 @@ final class SettingsViewController: UIViewController {
 
     weak var coordinator: AppCoordinator?
     // MARK: - Init
-    init(viewModel: UserFinanceViewModel) {
+    init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -41,7 +41,7 @@ final class SettingsViewController: UIViewController {
         static let backgroundColor: UIColor = .systemBackground
     }
 
-    private let viewModel: UserFinanceViewModel
+    private let viewModel: SettingsViewModel
 
     private let salaryTField = CustomTextField(fieldType: .salary)
 

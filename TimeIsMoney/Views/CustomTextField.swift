@@ -47,8 +47,10 @@ final class  CustomTextField: UITextField {
             isSecureTextEntry = true
         case .salary:
             placeholder = "000000"
+            keyboardType = .decimalPad
         case .expenses:
             placeholder = "000000"
+            keyboardType = .decimalPad
         case .purchaseName:
             placeholder = "Название траты"
         case .purchasePrice:

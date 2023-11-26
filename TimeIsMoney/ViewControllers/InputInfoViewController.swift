@@ -79,6 +79,7 @@ final class InputViewController: UIViewController {
         view.addSubview(expensesLabel)
         view.addSubview(expensesTField)
         view.addSubview(navButton)
+        navButton.alpha = 0
         navButton.addTarget(self, action: #selector(navButtonTapped), for: .touchUpInside)
     }
 

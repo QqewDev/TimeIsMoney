@@ -7,47 +7,95 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "61C84531-BD9C-4661-A7EE-4DA36D0964B9"
+            uuid = "EBB59353-6AD7-435B-89AF-1A65A4CDDA26"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TimeIsMoney/ViewControllers/InputInfoViewController.swift"
+            filePath = "TimeIsMoney/NotificationManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "InputViewController"
-            landmarkType = "3">
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "requestNotificationsPermission()"
+            landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "61C84531-BD9C-4661-A7EE-4DA36D0964B9 - ad3d76b4a4e3ffed"
+                  uuid = "EBB59353-6AD7-435B-89AF-1A65A4CDDA26 - 5439544fa75a128"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "TimeIsMoney.InputViewController.init(viewModel: TimeIsMoney.UserFinanceViewModel) -&gt; TimeIsMoney.InputViewController"
+                  symbolName = "TimeIsMoney.NotificationManager.requestNotificationsPermission() -&gt; ()"
                   moduleName = "TimeIsMoney"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewControllers/InputInfoViewController.swift"
+                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/NotificationManager.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "38"
-                  endingLineNumber = "38"
-                  offsetFromSymbolStart = "284">
+                  startingLineNumber = "20"
+                  endingLineNumber = "20"
+                  offsetFromSymbolStart = "32">
                </Location>
                <Location
-                  uuid = "61C84531-BD9C-4661-A7EE-4DA36D0964B9 - bba224793da84168"
+                  uuid = "EBB59353-6AD7-435B-89AF-1A65A4CDDA26 - 5439544fa75a128"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "TimeIsMoney.InputViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;TimeIsMoney.InputViewController&gt;"
+                  symbolName = "TimeIsMoney.NotificationManager.requestNotificationsPermission() -&gt; ()"
                   moduleName = "TimeIsMoney"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewControllers/InputInfoViewController.swift"
+                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/NotificationManager.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "38"
-                  endingLineNumber = "38"
-                  offsetFromSymbolStart = "272">
+                  startingLineNumber = "20"
+                  endingLineNumber = "20"
+                  offsetFromSymbolStart = "88">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EA2951EF-0764-4D09-A566-129F0AC204BD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TimeIsMoney/ViewModel/UserFinanceViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "requestNotificationsPermission()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EA2951EF-0764-4D09-A566-129F0AC204BD - 5d4d085c73b7be0b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TimeIsMoney.UserFinanceViewModel.requestNotificationsPermission() -&gt; ()"
+                  moduleName = "TimeIsMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewModel/UserFinanceViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  uuid = "EA2951EF-0764-4D09-A566-129F0AC204BD - 5d4d085c73b7be2a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TimeIsMoney.UserFinanceViewModel.requestNotificationsPermission() -&gt; ()"
+                  moduleName = "TimeIsMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewModel/UserFinanceViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "116"
+                  endingLineNumber = "116"
+                  offsetFromSymbolStart = "28">
                </Location>
             </Locations>
          </BreakpointContent>

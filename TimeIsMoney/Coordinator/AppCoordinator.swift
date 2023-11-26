@@ -20,7 +20,8 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-        let viewModel = UserFinanceViewModel()
+        let manager = NotificationManager()
+        let viewModel = UserFinanceViewModel(notificationManager: manager)
         if !isPreviouslyLaunched {
             let inputVC = InputViewController(viewModel: viewModel)
             inputVC.coordinator = self
@@ -32,8 +33,9 @@ final class AppCoordinator: Coordinator {
         }
     }
 
-    func showSettings(viewModel: UserFinanceViewModel) {
-        let settingsVC = SettingsViewController(viewModel: viewModel)
+    func showSettings() {
+        let settingsVM = SettingsViewModel()
+        let settingsVC = SettingsViewController(viewModel: settingsVM)
         settingsVC.coordinator = self
         navigationController.pushViewController(settingsVC, animated: true)
     }

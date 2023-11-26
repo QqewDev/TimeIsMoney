@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import UserNotifications
 
 private enum RealmDBError: Error {
     case dataNotFound
@@ -15,17 +16,24 @@ private enum RealmDBError: Error {
     case failedToLoadData
 }
 
-private enum Constants {
-    static let userPrimaryKey: String = "single_user_id"
-}
-
 protocol UserFinanceViewModelDelegate: AnyObject {
     func didUpdatedData()
+    func didGetPermissionForNotify()
 }
-final class UserFinanceViewModel {
+final class UserFinanceViewModel: NotificationManagerDelegate {
+    func didGetPermission() {
+        delegate?.didGetPermissionForNotify()
+    }
+    
+
+    private enum Constants {
+        static let userPrimaryKey: String = "single_user_id"
+    }
 
     // MARK: - Public variables
     weak var delegate: UserFinanceViewModelDelegate?
+
+    private let notificationManager: NotificationManager
 
     public var salary: Double {
         return data?.salary ?? 0.0
@@ -46,6 +54,10 @@ final class UserFinanceViewModel {
         return data?.dailyExpenses ?? []
     }
 
+    public var isNotificationsAllowed: Bool {
+      return notificationManager.isNotificationsAllowed
+    }
+    
     private var additionalExpenses: Double {
         return data?.dailyExpenses.reduce(0, { $0 + $1.cost }) ?? 0.0
     }
@@ -55,13 +67,15 @@ final class UserFinanceViewModel {
     private let realm: Realm?
 
     // MARK: - Init Realm
-    init() {
+    init(notificationManager: NotificationManager) {
+        self.notificationManager = notificationManager
         do {
             realm = try Realm()
         } catch let error {
             print("Failed to instantiate Realm: \(error.localizedDescription)")
             realm = nil
         }
+        self.notificationManager.delegate = self
     }
 
     // MARK: - Public methods
@@ -76,28 +90,10 @@ final class UserFinanceViewModel {
         UserDefaults.standard.set(true, forKey: "wasLaunchedBefore")
     }
 
-    func handleUpdatedData(salary: String?, expenses: String?) {
-        var newSalary: Double?
-        var newExpenses: Double?
-
-        if let salaryText = salary {
-            newSalary = Double(salaryText)
-        }
-
-        if let expensesText = expenses {
-            newExpenses = Double(expensesText)
-        }
-
-        guard newSalary != nil || newExpenses != nil else { return }
-
-        updateSalaryAndExpenses(salary: newSalary ?? Double(self.salary), monthlyExpenses: newExpenses ?? self.monthlyExpenses)
-    }
-
     func handleAddedExpense(title: String?, cost: String?, purchaseDate: Date?) {
         guard let titleText = title,
-              let costText = cost else { return }
-
-        guard let costDouble = Double(costText) else { return }
+              let costText = cost,
+              let costDouble = costText.toDoubleUsingComma() else { return }
 
         guard let purchaseDate = purchaseDate else { return }
 
@@ -116,19 +112,8 @@ final class UserFinanceViewModel {
         }
     }
 
-    func deleteAllDailyExpenses() {
-        do {
-            try realm?.write {
-                if let userFinance = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: Constants.userPrimaryKey) {
-                    userFinance.dailyExpenses.removeAll()
-                } else {
-                    print("Объект UserFinanceRealmModel не найден")
-                }
-            }
-            self.delegate?.didUpdatedData()
-        } catch {
-            print("Ошибка удаления ежедневных расходов: \(error.localizedDescription)")
-        }
+    func requestNotificationsPermission() {
+        notificationManager.requestNotificationsPermission()
     }
 
     // MARK: - Private Methods
@@ -148,22 +133,6 @@ final class UserFinanceViewModel {
             print("Ошибка сохранения данных в базу данных")
         } catch {
             print("Неизвестная ошибка: \(error.localizedDescription)")
-        }
-    }
-
-    private func updateSalaryAndExpenses(salary: Double, monthlyExpenses: Double) {
-        do {
-            try realm?.write {
-                if let userFinance = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: Constants.userPrimaryKey) {
-                    userFinance.salary = salary
-                    userFinance.monthlyExpenses = monthlyExpenses
-                } else {
-                    print("Объект UserFinanceRealmModel не найден")
-                }
-            }
-            self.delegate?.didUpdatedData()
-        } catch {
-            print("Ошибка обновления зарплаты и ежемесячных расходов: \(error.localizedDescription)")
         }
     }
 
