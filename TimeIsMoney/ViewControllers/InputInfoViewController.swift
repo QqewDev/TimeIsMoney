@@ -13,6 +13,7 @@ final class InputViewController: UIViewController {
 
     weak var coordinator: AppCoordinator?
 
+    // MARK: Init
     init(viewModel: UserFinanceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -42,7 +43,7 @@ final class InputViewController: UIViewController {
 
     private let expensesTField = CustomTextField(fieldType: .expenses)
 
-    private let navButton = CustomTextButton(title: Constants.navButtonText, hasBackground: true, fontSize: .big, bgColor: .mainGreen, textColor: .white)
+    private let navButton = CustomTextButton(title: Constants.navButtonText, hasBackground: true, fontSize: .big)
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
@@ -59,32 +60,14 @@ final class InputViewController: UIViewController {
         expensesTField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
 
-    @objc private func textFieldDidChange(_ textField: UITextField) {
-        if salaryTField.text?.isEmpty == false, expensesTField.text?.isEmpty == false {
-            UIView.animate(withDuration: 0.3) {
-                self.navButton.alpha = 1.0
-            }
-            navButton.isEnabled = true
-        } else {
-            UIView.animate(withDuration: 0.3) {
-                self.navButton.alpha = 0.0
-            }
-            navButton.isEnabled = false
-        }
-    }
-
     private func setupUI() {
         view.addSubview(salaryLabel)
         view.addSubview(salaryTField)
         view.addSubview(expensesLabel)
         view.addSubview(expensesTField)
         view.addSubview(navButton)
+        navButton.alpha = 0
         navButton.addTarget(self, action: #selector(navButtonTapped), for: .touchUpInside)
-    }
-
-    @objc private func navButtonTapped() {
-        viewModel.handleInputData(salary: salaryTField.text, expenses: expensesTField.text)
-        coordinator?.showDetail(viewModel: viewModel)
     }
 
     private func setConstraints() {
@@ -115,5 +98,25 @@ final class InputViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.viewHeight)
         }
+    }
+
+    // MARK: - Selectors methods
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        if salaryTField.text?.isEmpty == false, expensesTField.text?.isEmpty == false {
+            UIView.animate(withDuration: 0.3) {
+                self.navButton.alpha = 1.0
+            }
+            navButton.isEnabled = true
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                self.navButton.alpha = 0.0
+            }
+            navButton.isEnabled = false
+        }
+    }
+
+    @objc private func navButtonTapped() {
+        viewModel.handleInputData(salary: salaryTField.text, expenses: expensesTField.text)
+        coordinator?.showDetailVC()
     }
 }

@@ -20,28 +20,48 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-        let viewModel = UserFinanceViewModel()
-        if !isPreviouslyLaunched {
-            let inputVC = InputViewController(viewModel: viewModel)
-            inputVC.coordinator = self
-            navigationController.pushViewController(inputVC, animated: false)
-        } else {
-            let inputVC = DetailViewController(viewModel: viewModel)
-            inputVC.coordinator = self
-            navigationController.pushViewController(inputVC, animated: false)
-        }
+        showLoginVC()
     }
 
-    func showSettings(viewModel: UserFinanceViewModel) {
-        let settingsVC = SettingsViewController(viewModel: viewModel)
-        settingsVC.coordinator = self
-        navigationController.pushViewController(settingsVC, animated: true)
+    func showInputVC() {
+        let manager = NotificationManager()
+        let viewModel = UserFinanceViewModel(notificationManager: manager)
+        let inputVC = InputViewController(viewModel: viewModel)
+        inputVC.coordinator = self
+        navigationController.pushViewController(inputVC, animated: false)
     }
 
-    func showDetail(viewModel: UserFinanceViewModel) {
+    func showDetailVC() {
+        let manager = NotificationManager()
+        let viewModel = UserFinanceViewModel(notificationManager: manager)
         let detailVC = DetailViewController(viewModel: viewModel)
         detailVC.coordinator = self
-        navigationController.setViewControllers([detailVC], animated: true)
+        navigationController.pushViewController(detailVC, animated: false)
+    }
+
+    func showLoginVC() {
+        let manager = FirebaseAuthManager()
+        let loginVM = LoginViewModel(authManager: manager)
+        let loginVC = LoginViewController(viewModel: loginVM)
+        loginVC.coordinator = self
+        navigationController.viewControllers.removeAll()
+        navigationController.pushViewController(loginVC, animated: true)
+    }
+
+    func showRegisterVC() {
+        let manager = FirebaseAuthManager()
+        let registerVM = RegisterViewModel(authManager: manager)
+        let registerVC = RegisterViewController(viewModel: registerVM)
+        registerVC.coordinator = self
+        navigationController.pushViewController(registerVC, animated: true)
+    }
+
+    func showSettingsVC() {
+        let manager = FirebaseAuthManager()
+        let settingsVM = SettingsViewModel(manager: manager)
+        let settingsVC = SettingsViewController(viewModel: settingsVM)
+        settingsVC.coordinator = self
+        navigationController.pushViewController(settingsVC, animated: true)
     }
 
     func showExpensesList() {
@@ -51,7 +71,7 @@ final class AppCoordinator: Coordinator {
         navigationController.pushViewController(expensesListVC, animated: true)
     }
 
-    func showAddExpense(viewModel: UserFinanceViewModel) {
+    func showAddExpenseVC(viewModel: UserFinanceViewModel) {
         let addExpense = AddExpenseViewController(viewModel: viewModel)
         if let sheet = addExpense.sheetPresentationController {
             sheet.detents = [.medium()]
@@ -60,7 +80,7 @@ final class AppCoordinator: Coordinator {
         navigationController.present(addExpense, animated: true)
     }
 
-    func didFinishActions() {
+    func popViewController() {
         navigationController.popViewController(animated: true)
     }
 }

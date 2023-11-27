@@ -8,6 +8,8 @@
 
 import Foundation
 import RealmSwift
+import UserNotifications
+import FirebaseAuth
 
 private enum RealmDBError: Error {
     case dataNotFound
@@ -15,16 +17,18 @@ private enum RealmDBError: Error {
     case failedToLoadData
 }
 
-private enum Constants {
-    static let userPrimaryKey: String = "single_user_id"
-}
-
 protocol UserFinanceViewModelDelegate: AnyObject {
     func didUpdatedData()
+    func didGetPermissionForNotify()
 }
-final class UserFinanceViewModel {
 
-    // MARK: - Public variables
+final class UserFinanceViewModel: NotificationManagerDelegate {
+
+    private enum Constants {
+        static let userPrimaryKey: String = "single_user_id"
+    }
+
+    // MARK: - Public properties
     weak var delegate: UserFinanceViewModelDelegate?
 
     public var salary: Double {
@@ -46,24 +50,37 @@ final class UserFinanceViewModel {
         return data?.dailyExpenses ?? []
     }
 
+    public var isNotificationsAllowed: Bool {
+        return notificationManager.isNotificationsAllowed
+    }
+    
+    // MARK: - Private properties
     private var additionalExpenses: Double {
         return data?.dailyExpenses.reduce(0, { $0 + $1.cost }) ?? 0.0
     }
 
     private var data: UserFinanceModel?
 
+    private let notificationManager: NotificationManager
+
     private let realm: Realm?
 
+    private var uid: String = ""
+
     // MARK: - Init Realm
-    init() {
+    init(notificationManager: NotificationManager) {
+        self.notificationManager = notificationManager
         do {
             realm = try Realm()
         } catch let error {
             print("Failed to instantiate Realm: \(error.localizedDescription)")
             realm = nil
         }
+        self.notificationManager.delegate = self
+        if let actualUid = Auth.auth().currentUser?.uid {
+            self.uid = actualUid
+        }
     }
-
     // MARK: - Public methods
     func handleInputData(salary: String?, expenses: String?) {
         guard let salaryText = salary,
@@ -76,28 +93,10 @@ final class UserFinanceViewModel {
         UserDefaults.standard.set(true, forKey: "wasLaunchedBefore")
     }
 
-    func handleUpdatedData(salary: String?, expenses: String?) {
-        var newSalary: Double?
-        var newExpenses: Double?
-
-        if let salaryText = salary {
-            newSalary = Double(salaryText)
-        }
-
-        if let expensesText = expenses {
-            newExpenses = Double(expensesText)
-        }
-
-        guard newSalary != nil || newExpenses != nil else { return }
-
-        updateSalaryAndExpenses(salary: newSalary ?? Double(self.salary), monthlyExpenses: newExpenses ?? self.monthlyExpenses)
-    }
-
     func handleAddedExpense(title: String?, cost: String?, purchaseDate: Date?) {
         guard let titleText = title,
-              let costText = cost else { return }
-
-        guard let costDouble = Double(costText) else { return }
+              let costText = cost,
+              let costDouble = costText.toDoubleUsingComma() else { return }
 
         guard let purchaseDate = purchaseDate else { return }
 
@@ -105,33 +104,19 @@ final class UserFinanceViewModel {
         setData(salary: self.salary, monthlyExpenses: self.monthlyExpenses, newExpense: dailyExpense)
     }
 
-    func loadData() {
-        do {
-            try loadFromRealm()
-            delegate?.didUpdatedData()
-        } catch RealmDBError.failedToLoadData {
-            print("Ошибка загрузки данных")
-        } catch {
-            print("Неизвестная ошибка: \(error.localizedDescription)")
-        }
+    func requestNotifications() {
+        notificationManager.requestNotificationsPermission()
     }
 
-    func deleteAllDailyExpenses() {
-        do {
-            try realm?.write {
-                if let userFinance = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: Constants.userPrimaryKey) {
-                    userFinance.dailyExpenses.removeAll()
-                } else {
-                    print("Объект UserFinanceRealmModel не найден")
-                }
-            }
-            self.delegate?.didUpdatedData()
-        } catch {
-            print("Ошибка удаления ежедневных расходов: \(error.localizedDescription)")
-        }
+    func didGetPermission() {
+        delegate?.didGetPermissionForNotify()
     }
 
-    // MARK: - Private Methods
+    func requestNotificationsPermission() {
+        notificationManager.requestNotificationsPermission()
+    }
+
+    // MARK: - Private methods
     private func setData(salary: Double, monthlyExpenses: Double, newExpense: DailyExpense?) {
         if data == nil {
             data = UserFinanceModel(salary: salary, monthlyExpenses: monthlyExpenses, dailyExpenses: newExpense != nil ? [newExpense!] : [])
@@ -151,28 +136,13 @@ final class UserFinanceViewModel {
         }
     }
 
-    private func updateSalaryAndExpenses(salary: Double, monthlyExpenses: Double) {
-        do {
-            try realm?.write {
-                if let userFinance = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: Constants.userPrimaryKey) {
-                    userFinance.salary = salary
-                    userFinance.monthlyExpenses = monthlyExpenses
-                } else {
-                    print("Объект UserFinanceRealmModel не найден")
-                }
-            }
-            self.delegate?.didUpdatedData()
-        } catch {
-            print("Ошибка обновления зарплаты и ежемесячных расходов: \(error.localizedDescription)")
-        }
-    }
-
     private func saveToRealm() throws {
         guard let data = data else {
             throw RealmDBError.dataNotFound
         }
 
         let realmModel = UserFinanceRealmModel()
+        realmModel.id = uid
         realmModel.salary = data.salary
         realmModel.monthlyExpenses = data.monthlyExpenses
 
@@ -193,9 +163,19 @@ final class UserFinanceViewModel {
         }
     }
 
-    private func loadFromRealm() throws {
+    func loadData() {
+        do {
+            try loadFromRealm()
+            delegate?.didUpdatedData()
+        } catch RealmDBError.failedToLoadData {
+            print("Ошибка загрузки данных")
+        } catch {
+            print("Неизвестная ошибка: \(error.localizedDescription)")
+        }
+    }
 
-        guard let realmModel = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: Constants.userPrimaryKey) else {
+    private func loadFromRealm() throws {
+        guard let realmModel = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: uid) else {
             throw RealmDBError.failedToLoadData
         }
 

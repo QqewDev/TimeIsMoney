@@ -34,6 +34,7 @@ final class DetailViewController: UIViewController {
         static let mainColor: UIColor = .mainGreen
         static let bgTextColor: UIColor = .backgroundText
         static let backgroundColor: UIColor = .systemBackground
+        static let buttonSize: CGFloat = 50
     }
 
     private let viewModel: UserFinanceViewModel
@@ -48,6 +49,8 @@ final class DetailViewController: UIViewController {
 
     private let earnedMoneyInfoLabel = CustomLabel(isStatic: false, textColor: Constants.mainColor)
 
+    private let notificationButton = CustomImageButton(imageName: "bell.fill", hasTint: false)
+
     private let addExpenseButton: UIButton = {
         let button = UIButton()
         button.setTitle(Constants.addButtonTitle, for:  .normal)
@@ -59,6 +62,7 @@ final class DetailViewController: UIViewController {
     // MARK: - Lifecycle Methods
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
         viewModel.loadData()
         setupTimer()
     }
@@ -81,10 +85,6 @@ final class DetailViewController: UIViewController {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateUI), userInfo: nil, repeats: true)
     }
 
-    @objc private func updateUI() {
-        earnedMoneyInfoLabel.text = "Заработано:\n\(viewModel.earnedMoney)₽"
-    }
-
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
@@ -95,7 +95,10 @@ final class DetailViewController: UIViewController {
         expensesInfoLabel.text = "Траты:\n\(viewModel.monthlyExpenses)₽"
         availableMoneyInfoLabel.text = "Свободно:\n\(viewModel.availableMoney)₽"
         earnedMoneyInfoLabel.text = "Заработано:\n\(viewModel.earnedMoney)"
+        notificationButton.tintColor = viewModel.isNotificationsAllowed ? .mainGreen : .lightGray
+        notificationButton.layer.borderColor = viewModel.isNotificationsAllowed ? UIColor.mainGreen.cgColor : UIColor.lightGray.cgColor
         addExpenseButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        notificationButton.addTarget(self, action: #selector(notificationButtonTapped), for: .touchUpInside)
         makeAddButtonCorners()
 
     }
@@ -107,10 +110,6 @@ final class DetailViewController: UIViewController {
             shape.path = maskPath.cgPath
             self.addExpenseButton.layer.mask = shape
         }
-    }
-
-    @objc private func addButtonTapped() {
-        coordinator?.showAddExpense(viewModel: viewModel)
     }
 
     private func setupNavBar() {
@@ -128,20 +127,13 @@ final class DetailViewController: UIViewController {
 
     }
 
-    @objc func settingsButtonTapped() {
-        coordinator?.showSettings(viewModel: viewModel)
-    }
-
-    @objc func expensesListButtonTapped() {
-        coordinator?.showExpensesList()
-    }
-
     private func setConstraints() {
         view.addSubview(salaryInfoLabel)
         view.addSubview(expensesInfoLabel)
         view.addSubview(availableMoneyInfoLabel)
         view.addSubview(earnedMoneyInfoLabel)
         view.addSubview(addExpenseButton)
+        view.addSubview(notificationButton)
 
         salaryInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(Constants.viewVerticalOffset)
@@ -163,11 +155,38 @@ final class DetailViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
         }
 
+        notificationButton.snp.makeConstraints { make in
+            make.top.equalTo(earnedMoneyInfoLabel.snp.bottom).offset(40)
+            make.centerX.equalToSuperview()
+            make.height.width.equalTo(Constants.buttonSize)
+        }
+
         addExpenseButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(Constants.borderHeightMultiplier)
         }
+    }
+
+    // MARK: - Selectors
+    @objc private func addButtonTapped() {
+        coordinator?.showAddExpenseVC(viewModel: viewModel)
+    }
+
+    @objc private func notificationButtonTapped() {
+        viewModel.requestNotifications()
+    }
+
+    @objc private func updateUI() {
+        earnedMoneyInfoLabel.text = "Заработано:\n\(viewModel.earnedMoney)₽"
+    }
+
+    @objc private func settingsButtonTapped() {
+        coordinator?.showSettingsVC()
+    }
+
+    @objc private func expensesListButtonTapped() {
+        coordinator?.showExpensesList()
     }
 }
 
@@ -178,6 +197,13 @@ extension DetailViewController: UserFinanceViewModelDelegate {
             self.expensesInfoLabel.text = "Траты:\n\(self.viewModel.monthlyExpenses)₽"
             self.availableMoneyInfoLabel.text = "Свободно:\n\(self.viewModel.availableMoney)₽"
             self.earnedMoneyInfoLabel.text = "Заработано:\n\(self.viewModel.earnedMoney)₽"
+        }
+    }
+
+    func didGetPermissionForNotify() {
+        DispatchQueue.main.async {
+            self.notificationButton.tintColor = self.viewModel.isNotificationsAllowed ? .mainGreen : .lightGray
+            self.notificationButton.layer.borderColor = self.viewModel.isNotificationsAllowed ? UIColor.mainGreen.cgColor : UIColor.lightGray.cgColor
         }
     }
 }

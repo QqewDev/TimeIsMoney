@@ -38,7 +38,7 @@ final class AddExpenseViewController: UIViewController {
 
     private let purchaseCostTField = CustomTextField(fieldType: .purchasePrice)
 
-    private let saveButton = CustomTextButton(title: Constants.saveButtonTitle, hasBackground: true, fontSize: .big, bgColor: .backgroundText, textColor: .white)
+    private let saveButton = CustomTextButton(title: Constants.saveButtonTitle, hasBackground: true, fontSize: .big)
 
     private let purchaseDate = Date()
 
@@ -46,7 +46,7 @@ final class AddExpenseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .mainGreen
+        view.backgroundColor = .systemBackground
         setupViews()
         setConstraints()
     }
@@ -60,11 +60,6 @@ final class AddExpenseViewController: UIViewController {
         purchaseTitleTField.becomeFirstResponder()
 
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-    }
-
-    @objc private func saveButtonTapped(_ sender: UIButton) {
-        viewModel.handleAddedExpense(title: purchaseTitleTField.text, cost: purchaseCostTField.text, purchaseDate: Date())
-        dismiss(animated: true, completion: nil)
     }
 
     private func setConstraints() {
@@ -85,5 +80,11 @@ final class AddExpenseViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.buttonSize)
         }
+    }
+
+    // MARK: - Selectors methods
+    @objc private func saveButtonTapped(_ sender: UIButton) {
+        viewModel.handleAddedExpense(title: purchaseTitleTField.text, cost: purchaseCostTField.text, purchaseDate: Date())
+        dismiss(animated: true, completion: nil)
     }
 }

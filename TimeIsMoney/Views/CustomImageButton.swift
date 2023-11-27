@@ -15,9 +15,9 @@ final class CustomImageButton: UIButton {
         setImage(UIImage(systemName: imageName), for: .normal)
         layer.masksToBounds = true
 
-        tintColor = hasTint ? .mainGreen : .clear
+        tintColor = hasTint ? .mainGreen : .lightGray
         layer.borderWidth = 1
-        layer.borderColor = UIColor.mainGreen.cgColor
+        layer.borderColor = hasTint ? UIColor.mainGreen.cgColor : UIColor.lightGray.cgColor
     }
 
     override func layoutSubviews() {

@@ -8,26 +8,28 @@
 
 import Foundation
 import RealmSwift
+import FirebaseAuth
 
 private enum RealmDBError: Error {
     case failedToLoadData
-}
-
-private enum Constants {
-    static let userPrimaryKey: String = "single_user_id"
 }
 
 final class ExpensesListViewModel {
 
     weak var coordinator : AppCoordinator!
 
-    // MARK: - Public variables
+    // MARK: - Public properties
     public  var items: [String: [DailyExpenseRealmModel]] = [:]
 
     public var uniqueDates: [String] = []
 
+    private var uid: String = ""
+
     // MARK: - Init
     init() {
+        if let actualUid = Auth.auth().currentUser?.uid {
+            self.uid = actualUid
+        }
         setupData()
     }
 
@@ -53,7 +55,7 @@ final class ExpensesListViewModel {
     private func removeExpense(with id: String) {
         do {
             guard let realm = try? Realm(),
-                  let expense = realm.object(ofType: DailyExpenseRealmModel.self, forPrimaryKey: id)
+                  let expense = realm.object(ofType: DailyExpenseRealmModel.self, forPrimaryKey: uid)
             else {
                 throw RealmDBError.failedToLoadData
             }
@@ -70,8 +72,9 @@ final class ExpensesListViewModel {
 
     private func setupData() {
         do {
-            guard let realm = try? Realm(),
-                  let realmModel = realm.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: Constants.userPrimaryKey)
+            guard !uid.isEmpty,
+                  let realm = try? Realm(),
+                  let realmModel = realm.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: uid)
             else {
                 throw RealmDBError.failedToLoadData
             }
