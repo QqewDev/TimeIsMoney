@@ -6,7 +6,6 @@
 // Created by Alexander Kist on 27.11.2023.
 //
 
-
 import UIKit
 import SnapKit
 
@@ -42,12 +41,12 @@ class HeaderView: UIView {
 
         setupViews()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupViews(){
+    private func setupViews() {
         addSubview(logoImageView)
         addSubview(titleLabel)
         addSubview(subTitleLabel)

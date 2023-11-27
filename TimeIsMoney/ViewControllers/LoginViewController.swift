@@ -10,15 +10,26 @@ import UIKit
 import SnapKit
 
 class LoginViewController: UIViewController {
-   
-    weak var coordinator: AppCoordinator?
 
+    weak var coordinator: AppCoordinator?
+    // MARK: - Init
+    init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - Private variables
+    private var viewModel: LoginViewModel
     private let headerView = HeaderView(title: "Вход", subtitle: "Войдите в свой аккаунт")
     private let emailTField = CustomTextField(fieldType: .email)
     private let passwordTField = CustomTextField(fieldType: .password)
     private let loginButton = CustomTextButton(title: "Войти", hasBackground: true, fontSize: .big)
     private let goToRegisterVCButton = CustomTextButton(title: "Нет аккаунта? Создать аккаунт", hasBackground: false, fontSize: .small)
-    
+
+    // MARK: - Lifecycle methods
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.isHidden = true
     }
@@ -28,7 +39,8 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupViews()
     }
-
+    
+    // MARK: - Private methods
     private func setupViews() {
 
         emailTField.tag = 0
@@ -78,14 +90,22 @@ class LoginViewController: UIViewController {
         goToRegisterVCButton.addTarget(self, action: #selector(goToRegisterVCButtonTapped), for: .touchUpInside)
     }
 
-
-    //MARK: - Selectors
-    @objc private func loginButtonTapped(){
-        print("Login button tapped")
+    // MARK: - Selectors methods
+    @objc private func loginButtonTapped() {
+        guard let email = emailTField.text, let password = passwordTField.text else { return }
+        viewModel.loginUser(email: email, password: password) { [weak self] result in
+            switch result {
+            case .success(let authData):
+                self?.coordinator?.showDetailVC()
+                print(authData.user.uid)
+            case .failure(let error):
+                print("Ошибка логина: \(error)")
+            }
+        }
     }
-    
-    @objc private func goToRegisterVCButtonTapped(){
-        coordinator?.showRegister()
+
+    @objc private func goToRegisterVCButtonTapped() {
+        coordinator?.showRegisterVC()
     }
 
 }

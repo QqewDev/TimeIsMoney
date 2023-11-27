@@ -61,11 +61,6 @@ final class AddExpenseViewController: UIViewController {
 
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
-    
-    @objc private func saveButtonTapped(_ sender: UIButton) {
-        viewModel.handleAddedExpense(title: purchaseTitleTField.text, cost: purchaseCostTField.text, purchaseDate: Date())
-        dismiss(animated: true, completion: nil)
-    }
 
     private func setConstraints() {
         purchaseTitleTField.snp.makeConstraints { make in
@@ -85,5 +80,11 @@ final class AddExpenseViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(Constants.viewHorizontalInset)
             make.height.equalTo(Constants.buttonSize)
         }
+    }
+
+    // MARK: - Selectors methods
+    @objc private func saveButtonTapped(_ sender: UIButton) {
+        viewModel.handleAddedExpense(title: purchaseTitleTField.text, cost: purchaseCostTField.text, purchaseDate: Date())
+        dismiss(animated: true, completion: nil)
     }
 }

@@ -20,45 +20,48 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-        showLogin()
-//        let manager = NotificationManager()
-//        let viewModel = UserFinanceViewModel(notificationManager: manager)
-//        if !isPreviouslyLaunched {
-//            let inputVC = InputViewController(viewModel: viewModel)
-//            inputVC.coordinator = self
-//            navigationController.pushViewController(inputVC, animated: false)
-//        } else {
-//            let inputVC = DetailViewController(viewModel: viewModel)
-//            inputVC.coordinator = self
-//            navigationController.pushViewController(inputVC, animated: false)
-//        }
+        showLoginVC()
     }
 
-    func showLogin(){
-        let loginVC = LoginViewController()
+    func showInputVC() {
+        let manager = NotificationManager()
+        let viewModel = UserFinanceViewModel(notificationManager: manager)
+        let inputVC = InputViewController(viewModel: viewModel)
+        inputVC.coordinator = self
+        navigationController.pushViewController(inputVC, animated: false)
+    }
+
+    func showDetailVC() {
+        let manager = NotificationManager()
+        let viewModel = UserFinanceViewModel(notificationManager: manager)
+        let detailVC = DetailViewController(viewModel: viewModel)
+        detailVC.coordinator = self
+        navigationController.pushViewController(detailVC, animated: false)
+    }
+
+    func showLoginVC() {
+        let manager = FirebaseAuthManager()
+        let loginVM = LoginViewModel(authManager: manager)
+        let loginVC = LoginViewController(viewModel: loginVM)
         loginVC.coordinator = self
-        navigationController.removeFromParent()
+        navigationController.viewControllers.removeAll()
         navigationController.pushViewController(loginVC, animated: true)
     }
 
-    func showRegister(){
-        let registerVC = RegisterViewController()
+    func showRegisterVC() {
+        let manager = FirebaseAuthManager()
+        let registerVM = RegisterViewModel(authManager: manager)
+        let registerVC = RegisterViewController(viewModel: registerVM)
         registerVC.coordinator = self
-        navigationController.removeFromParent()
         navigationController.pushViewController(registerVC, animated: true)
     }
 
-    func showSettings() {
-        let settingsVM = SettingsViewModel()
+    func showSettingsVC() {
+        let manager = FirebaseAuthManager()
+        let settingsVM = SettingsViewModel(manager: manager)
         let settingsVC = SettingsViewController(viewModel: settingsVM)
         settingsVC.coordinator = self
         navigationController.pushViewController(settingsVC, animated: true)
-    }
-
-    func showDetail(viewModel: UserFinanceViewModel) {
-        let detailVC = DetailViewController(viewModel: viewModel)
-        detailVC.coordinator = self
-        navigationController.setViewControllers([detailVC], animated: true)
     }
 
     func showExpensesList() {
@@ -68,7 +71,7 @@ final class AppCoordinator: Coordinator {
         navigationController.pushViewController(expensesListVC, animated: true)
     }
 
-    func showAddExpense(viewModel: UserFinanceViewModel) {
+    func showAddExpenseVC(viewModel: UserFinanceViewModel) {
         let addExpense = AddExpenseViewController(viewModel: viewModel)
         if let sheet = addExpense.sheetPresentationController {
             sheet.detents = [.medium()]

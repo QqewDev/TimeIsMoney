@@ -45,11 +45,8 @@ final class NotificationManager {
 
     private let notificationID = "earnedMoneyNotification"
 
-
-
-
     private func scheduleNotifications() {
-        
+
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notificationID])
         print("Удаляем старые запросы на уведомления")
         print("Создаем контент уведомления")
@@ -62,9 +59,9 @@ final class NotificationManager {
         print("Создаем триггер с интервалом")
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3600 , repeats: true)
-        
+
         let request = UNNotificationRequest(identifier: notificationID, content: content, trigger: trigger)
-        
+
         print("Запрашиваем новое уведомление")
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {

@@ -52,5 +52,53 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "72B8DB69-C4A2-400B-9CE7-02A3DB284F9D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TimeIsMoney/ViewModel/ExpensesListViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "ExpensesListViewModel"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "72B8DB69-C4A2-400B-9CE7-02A3DB284F9D - c486cd02b7cf3461"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TimeIsMoney.ExpensesListViewModel.removeExpense(with: Swift.String) -&gt; ()"
+                  moduleName = "TimeIsMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewModel/ExpensesListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "852">
+               </Location>
+               <Location
+                  uuid = "72B8DB69-C4A2-400B-9CE7-02A3DB284F9D - 21195da18f5bc44e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TimeIsMoney.ExpensesListViewModel.setupData() -&gt; ()"
+                  moduleName = "TimeIsMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewModel/ExpensesListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79"
+                  offsetFromSymbolStart = "392">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

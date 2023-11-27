@@ -12,11 +12,11 @@ extension UIFont {
     static func largeTitle() -> UIFont {
         return UIFont.preferredFont(forTextStyle: .largeTitle)
     }
-    
+
     static func boldHeaderTitile() -> UIFont {
         return UIFont.systemFont(ofSize: 26, weight: .bold)
     }
-    
+
     static func regularHeaderSubTitile() -> UIFont {
         return UIFont.systemFont(ofSize: 18, weight: .regular)
     }
