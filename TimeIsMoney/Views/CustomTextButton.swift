@@ -16,15 +16,14 @@ final class CustomTextButton: UIButton {
         case small
     }
 
-    init(title: String, hasBackground: Bool = false, fontSize: FontSize, bgColor: UIColor, textColor: UIColor) {
+    init(title: String, hasBackground: Bool = false, fontSize: FontSize) {
         super.init(frame: .zero)
         setTitle(title, for: .normal)
-        layer.cornerRadius = 12
         layer.masksToBounds = true
 
-        backgroundColor = hasBackground ? bgColor : .clear
+        backgroundColor = hasBackground ? .mainGreen : .clear
 
-        let titleColor: UIColor = hasBackground ? textColor : .systemBlue
+        let titleColor: UIColor = hasBackground ? .white : .mainGreen
         setTitleColor(titleColor, for: .normal)
 
         switch fontSize {

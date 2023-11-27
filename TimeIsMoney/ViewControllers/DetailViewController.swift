@@ -119,7 +119,7 @@ final class DetailViewController: UIViewController {
         coordinator?.showAddExpense(viewModel: viewModel)
     }
     @objc private func notificationButtonTapped() {
-        viewModel.requestNotificationsPermission()
+        viewModel.requestNotifications()
     }
 
     private func setupNavBar() {

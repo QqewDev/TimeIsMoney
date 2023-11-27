@@ -14,6 +14,9 @@
 		4698BDFF2B13A30A003DCAC7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BDFE2B13A30A003DCAC7 /* SettingsViewModel.swift */; };
 		4698BE012B13AA5B003DCAC7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BE002B13AA5B003DCAC7 /* NotificationManager.swift */; };
 		4698BE032B13D6AC003DCAC7 /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BE022B13D6AC003DCAC7 /* Extension+String.swift */; };
+		4698BE052B14C4D0003DCAC7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BE042B14C4D0003DCAC7 /* LoginViewController.swift */; };
+		4698BE082B14C9B8003DCAC7 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BE072B14C9B8003DCAC7 /* HeaderView.swift */; };
+		4698BE0A2B14D4D8003DCAC7 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4698BE092B14D4D8003DCAC7 /* RegisterViewController.swift */; };
 		46EAAE0A2B068925003042E8 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE092B068925003042E8 /* Double+Extension.swift */; };
 		46EAAE0E2B068E05003042E8 /* AddExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE0D2B068E05003042E8 /* AddExpenseViewController.swift */; };
 		46EAAE142B091B52003042E8 /* ExpensesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EAAE132B091B52003042E8 /* ExpensesListViewController.swift */; };
@@ -45,6 +48,9 @@
 		4698BDFE2B13A30A003DCAC7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		4698BE002B13AA5B003DCAC7 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4698BE022B13D6AC003DCAC7 /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
+		4698BE042B14C4D0003DCAC7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		4698BE072B14C9B8003DCAC7 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		4698BE092B14D4D8003DCAC7 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		46EAAE092B068925003042E8 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		46EAAE0D2B068E05003042E8 /* AddExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseViewController.swift; sourceTree = "<group>"; };
 		46EAAE132B091B52003042E8 /* ExpensesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesListViewController.swift; sourceTree = "<group>"; };
@@ -89,8 +95,18 @@
 				46FE95672B06850F006924EB /* DetailViewController.swift */,
 				46FE95692B06858E006924EB /* SettingsViewController.swift */,
 				46EAAE0D2B068E05003042E8 /* AddExpenseViewController.swift */,
+				4698BE042B14C4D0003DCAC7 /* LoginViewController.swift */,
+				4698BE092B14D4D8003DCAC7 /* RegisterViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		4698BE062B14C93C003DCAC7 /* LocalNotification */ = {
+			isa = PBXGroup;
+			children = (
+				4698BE002B13AA5B003DCAC7 /* NotificationManager.swift */,
+			);
+			path = LocalNotification;
 			sourceTree = "<group>";
 		};
 		46EAAE052B0688CE003042E8 /* Models */ = {
@@ -119,6 +135,7 @@
 				4698BDC62B1238DB003DCAC7 /* CustomLabel.swift */,
 				4698BDC82B1239D6003DCAC7 /* CustomTextButton.swift */,
 				4698BDCA2B123DDC003DCAC7 /* CustomImageButton.swift */,
+				4698BE072B14C9B8003DCAC7 /* HeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -179,7 +196,7 @@
 				46EAAE0B2B068B2D003042E8 /* Views */,
 				46EAAE0C2B068B48003042E8 /* ViewModel */,
 				46FE955C2B0681A9006924EB /* Resources */,
-				4698BE002B13AA5B003DCAC7 /* NotificationManager.swift */,
+				4698BE062B14C93C003DCAC7 /* LocalNotification */,
 			);
 			path = TimeIsMoney;
 			sourceTree = "<group>";
@@ -315,7 +332,9 @@
 				46FE956C2B0685D7006924EB /* UserFinanceViewModel.swift in Sources */,
 				4698BDCB2B123DDC003DCAC7 /* CustomImageButton.swift in Sources */,
 				46FE95702B06862E006924EB /* UserFinanceRealmModel.swift in Sources */,
+				4698BE082B14C9B8003DCAC7 /* HeaderView.swift in Sources */,
 				46FE954A2B068190006924EB /* SceneDelegate.swift in Sources */,
+				4698BE052B14C4D0003DCAC7 /* LoginViewController.swift in Sources */,
 				4698BDC52B123721003DCAC7 /* CustomTextField.swift in Sources */,
 				46FE95662B0684E4006924EB /* InputInfoViewController.swift in Sources */,
 				46FE956A2B06858E006924EB /* SettingsViewController.swift in Sources */,
@@ -325,6 +344,7 @@
 				46EAAE182B0A7F90003042E8 /* ExpensesCell.swift in Sources */,
 				46FE956E2B068624006924EB /* UserFinanceModel.swift in Sources */,
 				46EAAE162B0A7D8C003042E8 /* ExpensesListViewModel.swift in Sources */,
+				4698BE0A2B14D4D8003DCAC7 /* RegisterViewController.swift in Sources */,
 				46EAAE0E2B068E05003042E8 /* AddExpenseViewController.swift in Sources */,
 				4698BDFF2B13A30A003DCAC7 /* SettingsViewModel.swift in Sources */,
 			);

@@ -52,53 +52,5 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "EA2951EF-0764-4D09-A566-129F0AC204BD"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TimeIsMoney/ViewModel/UserFinanceViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "requestNotificationsPermission()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "EA2951EF-0764-4D09-A566-129F0AC204BD - 5d4d085c73b7be0b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TimeIsMoney.UserFinanceViewModel.requestNotificationsPermission() -&gt; ()"
-                  moduleName = "TimeIsMoney"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewModel/UserFinanceViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "117"
-                  endingLineNumber = "117"
-                  offsetFromSymbolStart = "28">
-               </Location>
-               <Location
-                  uuid = "EA2951EF-0764-4D09-A566-129F0AC204BD - 5d4d085c73b7be2a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TimeIsMoney.UserFinanceViewModel.requestNotificationsPermission() -&gt; ()"
-                  moduleName = "TimeIsMoney"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aleksandrkist/Desktop/Study/UIKit/TimeIsMoney/TimeIsMoney/ViewModel/UserFinanceViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "116"
-                  endingLineNumber = "116"
-                  offsetFromSymbolStart = "28">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

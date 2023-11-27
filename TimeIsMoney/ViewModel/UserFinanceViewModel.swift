@@ -26,6 +26,21 @@ final class UserFinanceViewModel: NotificationManagerDelegate {
     }
     
 
+    init(notificationManager: NotificationManager) {
+        self.notificationManager = notificationManager
+        do {
+            realm = try Realm()
+        } catch let error {
+            print("Failed to instantiate Realm: \(error.localizedDescription)")
+            realm = nil
+        }
+        self.notificationManager.delegate = self
+    }
+
+    func requestNotificationsPermission() {
+        notificationManager.requestNotificationsPermission()
+    }
+
     private enum Constants {
         static let userPrimaryKey: String = "single_user_id"
     }
@@ -67,16 +82,7 @@ final class UserFinanceViewModel: NotificationManagerDelegate {
     private let realm: Realm?
 
     // MARK: - Init Realm
-    init(notificationManager: NotificationManager) {
-        self.notificationManager = notificationManager
-        do {
-            realm = try Realm()
-        } catch let error {
-            print("Failed to instantiate Realm: \(error.localizedDescription)")
-            realm = nil
-        }
-        self.notificationManager.delegate = self
-    }
+
 
     // MARK: - Public methods
     func handleInputData(salary: String?, expenses: String?) {
@@ -112,7 +118,7 @@ final class UserFinanceViewModel: NotificationManagerDelegate {
         }
     }
 
-    func requestNotificationsPermission() {
+    func requestNotifications() {
         notificationManager.requestNotificationsPermission()
     }
 

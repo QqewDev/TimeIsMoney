@@ -20,17 +20,32 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-        let manager = NotificationManager()
-        let viewModel = UserFinanceViewModel(notificationManager: manager)
-        if !isPreviouslyLaunched {
-            let inputVC = InputViewController(viewModel: viewModel)
-            inputVC.coordinator = self
-            navigationController.pushViewController(inputVC, animated: false)
-        } else {
-            let inputVC = DetailViewController(viewModel: viewModel)
-            inputVC.coordinator = self
-            navigationController.pushViewController(inputVC, animated: false)
-        }
+        showLogin()
+//        let manager = NotificationManager()
+//        let viewModel = UserFinanceViewModel(notificationManager: manager)
+//        if !isPreviouslyLaunched {
+//            let inputVC = InputViewController(viewModel: viewModel)
+//            inputVC.coordinator = self
+//            navigationController.pushViewController(inputVC, animated: false)
+//        } else {
+//            let inputVC = DetailViewController(viewModel: viewModel)
+//            inputVC.coordinator = self
+//            navigationController.pushViewController(inputVC, animated: false)
+//        }
+    }
+
+    func showLogin(){
+        let loginVC = LoginViewController()
+        loginVC.coordinator = self
+        navigationController.removeFromParent()
+        navigationController.pushViewController(loginVC, animated: true)
+    }
+
+    func showRegister(){
+        let registerVC = RegisterViewController()
+        registerVC.coordinator = self
+        navigationController.removeFromParent()
+        navigationController.pushViewController(registerVC, animated: true)
     }
 
     func showSettings() {
@@ -62,7 +77,7 @@ final class AppCoordinator: Coordinator {
         navigationController.present(addExpense, animated: true)
     }
 
-    func didFinishActions() {
+    func popViewController() {
         navigationController.popViewController(animated: true)
     }
 }

@@ -42,7 +42,7 @@ final class InputViewController: UIViewController {
 
     private let expensesTField = CustomTextField(fieldType: .expenses)
 
-    private let navButton = CustomTextButton(title: Constants.navButtonText, hasBackground: true, fontSize: .big, bgColor: .mainGreen, textColor: .white)
+    private let navButton = CustomTextButton(title: Constants.navButtonText, hasBackground: true, fontSize: .big)
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
