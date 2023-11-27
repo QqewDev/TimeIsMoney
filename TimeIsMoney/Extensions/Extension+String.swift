@@ -6,7 +6,6 @@
 // Created by Alexander Kist on 26.11.2023.
 //
 
-
 import Foundation
 
 extension String {

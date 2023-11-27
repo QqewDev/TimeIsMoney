@@ -28,6 +28,7 @@ final class SettingsViewController: UIViewController {
         static let salaryPlaceholder: String = "Изменить зарплату"
         static let expensesPlaceholder: String = "Изменить ежемесячные траты "
         static let deleteLabel: String = "Удалить историю трат"
+        static let logoutLabel: String = "Выйти из аккаунта"
         static let saveButtonTitle: String = "Сохранить"
         static let deleteButtonImageName: String = "trash.fill"
         static let viewVerticalOffset: CGFloat = 20
@@ -49,9 +50,13 @@ final class SettingsViewController: UIViewController {
 
     private let deleteLabel = CustomLabel(text: Constants.deleteLabel, isStatic: true, textColor: Constants.bgTextColor)
 
-    private let saveButton = CustomTextButton(title: Constants.saveButtonTitle, hasBackground: true, fontSize: .big, bgColor: Constants.mainColor, textColor: Constants.saveButtonTextColor)
+    private let saveButton = CustomTextButton(title: Constants.saveButtonTitle, hasBackground: true, fontSize: .big)
 
     private let deleteButton = CustomImageButton(imageName: Constants.deleteButtonImageName, hasTint: true)
+
+    private let logoutLabel = CustomLabel(text: Constants.logoutLabel, isStatic: true, textColor: Constants.bgTextColor)
+
+    private let logoutButton = CustomImageButton(imageName: "person.badge.minus", hasTint: true)
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
@@ -92,6 +97,17 @@ final class SettingsViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.height.width.equalTo(Constants.buttonSize)
         }
+
+        logoutLabel.snp.makeConstraints { make in
+            make.top.equalTo(deleteButton.snp.bottom).offset(Constants.viewVerticalOffset)
+            make.centerX.equalToSuperview()
+        }
+
+        logoutButton.snp.makeConstraints { make in
+            make.top.equalTo(logoutLabel.snp.bottom).offset(Constants.viewVerticalOffset)
+            make.centerX.equalToSuperview()
+            make.height.width.equalTo(Constants.buttonSize)
+        }
     }
 
     private func setupViews() {
@@ -100,24 +116,39 @@ final class SettingsViewController: UIViewController {
         view.addSubview(saveButton)
         view.addSubview(deleteLabel)
         view.addSubview(deleteButton)
+        view.addSubview(logoutLabel)
+        view.addSubview(logoutButton)
 
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
 
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
     }
 
     private func setupNavBar() {
         navigationController?.navigationBar.tintColor = .mainGreen
         navigationController?.navigationBar.barTintColor = .systemBackground
     }
-
+    // MARK: - Selectors methods
     @objc private func saveButtonTapped(_ sender: UIButton) {
         viewModel.handleUpdatedData(salary: salaryTField.text, expenses: expensesTField.text)
-        coordinator?.didFinishActions()
+        coordinator?.popViewController()
     }
 
     @objc private func deleteButtonTapped(_ sender: UIButton) {
         viewModel.deleteAllDailyExpenses()
-        coordinator?.didFinishActions()
+        coordinator?.popViewController()
+    }
+
+    @objc private func logoutButtonTapped(_ sender: UIButton) {
+        viewModel.signOut { [weak self] error in
+            if let error = error {
+                print("\(error.localizedDescription)")
+            } else {
+                self?.coordinator?.showLoginVC()
+            }
+        }
+
     }
 }

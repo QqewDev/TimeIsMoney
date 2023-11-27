@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 import UserNotifications
+import FirebaseAuth
 
 private enum RealmDBError: Error {
     case dataNotFound
@@ -20,20 +21,15 @@ protocol UserFinanceViewModelDelegate: AnyObject {
     func didUpdatedData()
     func didGetPermissionForNotify()
 }
+
 final class UserFinanceViewModel: NotificationManagerDelegate {
-    func didGetPermission() {
-        delegate?.didGetPermissionForNotify()
-    }
-    
 
     private enum Constants {
         static let userPrimaryKey: String = "single_user_id"
     }
 
-    // MARK: - Public variables
+    // MARK: - Public properties
     weak var delegate: UserFinanceViewModelDelegate?
-
-    private let notificationManager: NotificationManager
 
     public var salary: Double {
         return data?.salary ?? 0.0
@@ -55,16 +51,21 @@ final class UserFinanceViewModel: NotificationManagerDelegate {
     }
 
     public var isNotificationsAllowed: Bool {
-      return notificationManager.isNotificationsAllowed
+        return notificationManager.isNotificationsAllowed
     }
     
+    // MARK: - Private properties
     private var additionalExpenses: Double {
         return data?.dailyExpenses.reduce(0, { $0 + $1.cost }) ?? 0.0
     }
 
     private var data: UserFinanceModel?
 
+    private let notificationManager: NotificationManager
+
     private let realm: Realm?
+
+    private var uid: String = ""
 
     // MARK: - Init Realm
     init(notificationManager: NotificationManager) {
@@ -76,8 +77,10 @@ final class UserFinanceViewModel: NotificationManagerDelegate {
             realm = nil
         }
         self.notificationManager.delegate = self
+        if let actualUid = Auth.auth().currentUser?.uid {
+            self.uid = actualUid
+        }
     }
-
     // MARK: - Public methods
     func handleInputData(salary: String?, expenses: String?) {
         guard let salaryText = salary,
@@ -101,22 +104,19 @@ final class UserFinanceViewModel: NotificationManagerDelegate {
         setData(salary: self.salary, monthlyExpenses: self.monthlyExpenses, newExpense: dailyExpense)
     }
 
-    func loadData() {
-        do {
-            try loadFromRealm()
-            delegate?.didUpdatedData()
-        } catch RealmDBError.failedToLoadData {
-            print("Ошибка загрузки данных")
-        } catch {
-            print("Неизвестная ошибка: \(error.localizedDescription)")
-        }
+    func requestNotifications() {
+        notificationManager.requestNotificationsPermission()
+    }
+
+    func didGetPermission() {
+        delegate?.didGetPermissionForNotify()
     }
 
     func requestNotificationsPermission() {
         notificationManager.requestNotificationsPermission()
     }
 
-    // MARK: - Private Methods
+    // MARK: - Private methods
     private func setData(salary: Double, monthlyExpenses: Double, newExpense: DailyExpense?) {
         if data == nil {
             data = UserFinanceModel(salary: salary, monthlyExpenses: monthlyExpenses, dailyExpenses: newExpense != nil ? [newExpense!] : [])
@@ -142,6 +142,7 @@ final class UserFinanceViewModel: NotificationManagerDelegate {
         }
 
         let realmModel = UserFinanceRealmModel()
+        realmModel.id = uid
         realmModel.salary = data.salary
         realmModel.monthlyExpenses = data.monthlyExpenses
 
@@ -162,9 +163,19 @@ final class UserFinanceViewModel: NotificationManagerDelegate {
         }
     }
 
-    private func loadFromRealm() throws {
+    func loadData() {
+        do {
+            try loadFromRealm()
+            delegate?.didUpdatedData()
+        } catch RealmDBError.failedToLoadData {
+            print("Ошибка загрузки данных")
+        } catch {
+            print("Неизвестная ошибка: \(error.localizedDescription)")
+        }
+    }
 
-        guard let realmModel = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: Constants.userPrimaryKey) else {
+    private func loadFromRealm() throws {
+        guard let realmModel = realm?.object(ofType: UserFinanceRealmModel.self, forPrimaryKey: uid) else {
             throw RealmDBError.failedToLoadData
         }
 
